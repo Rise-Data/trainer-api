@@ -14,12 +14,6 @@ public class Exercise {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exercise")
     private Integer Id;
 
-    @Column(name = "TB_TREINO_cd_treino", length = 3, nullable = false)
-    private Integer idTreinament;
-
-    @Column(name = "TB_TIPO_EXERCICIO_cd_tipo_exercicio", length = 3, nullable = false)
-    private Integer idExerciseType;
-
     @Column(name = "nr_repeticoes", length = 3)
     private Integer repetitions;
 
@@ -43,10 +37,8 @@ public class Exercise {
     public Exercise() {
     }
 
-    public Exercise(Integer id, Integer idTreinament, Integer idExerciseType, Integer repetitions, String description, String linkVideo, String name) {
+    public Exercise(Integer id, Integer repetitions, String description, String linkVideo, String name) {
         Id = id;
-        this.idTreinament = idTreinament;
-        this.idExerciseType = idExerciseType;
         this.repetitions = repetitions;
         this.description = description;
         this.linkVideo = linkVideo;
@@ -59,22 +51,6 @@ public class Exercise {
 
     public void setId(Integer id) {
         Id = id;
-    }
-
-    public Integer getIdTreinament() {
-        return idTreinament;
-    }
-
-    public void setIdTreinament(Integer idTreinament) {
-        this.idTreinament = idTreinament;
-    }
-
-    public Integer getIdExerciseType() {
-        return idExerciseType;
-    }
-
-    public void setIdExerciseType(Integer idExerciseType) {
-        this.idExerciseType = idExerciseType;
     }
 
     public Integer getRepetitions() {
