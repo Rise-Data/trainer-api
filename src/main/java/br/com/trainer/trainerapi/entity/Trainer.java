@@ -88,4 +88,12 @@ public class Trainer {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    public Chatbot getChatbot() {
+        return chatbot;
+    }
+
+    public void setChatbot(Chatbot chatbot) {
+        this.chatbot = chatbot;
+    }
 }

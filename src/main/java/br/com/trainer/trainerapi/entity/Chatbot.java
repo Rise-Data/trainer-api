@@ -44,6 +44,14 @@ public class Chatbot {
         this.name = name;
     }
 
+    public Trainer getTrainer() {
+        return trainer;
+    }
+
+    public void setTrainer(Trainer trainer) {
+        this.trainer = trainer;
+    }
+
     @Override
     public String toString() {
         return "Chatbot{" +
