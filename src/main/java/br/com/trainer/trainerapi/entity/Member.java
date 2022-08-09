@@ -1,6 +1,8 @@
 package br.com.trainer.trainerapi.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_aluno")
@@ -28,15 +30,25 @@ public class Member {
     @JoinColumn(name = "cd_trainer")
     private Trainer trainer;
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Training> trainings;
+
     public Member() {
+        this.trainings = new ArrayList<>();
     }
 
     public Member(Integer id, String name, String phone) {
+        this.trainings = new ArrayList<>();
         this.id = id;
         this.name = name;
         this.phone = phone;
         this.active = true;
         this.trainingSequence = 0;
+    }
+
+    public void addTraining(Training training) {
+        training.setMember(this);
+        this.trainings.add(training);
     }
 
     public Integer getId() {
@@ -85,5 +97,13 @@ public class Member {
 
     public void setTrainer(Trainer trainer) {
         this.trainer = trainer;
+    }
+
+    public List<Training> getTrainings() {
+        return trainings;
+    }
+
+    public void setTrainings(List<Training> trainings) {
+        this.trainings = trainings;
     }
 }

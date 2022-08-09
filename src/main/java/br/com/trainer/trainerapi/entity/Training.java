@@ -16,6 +16,10 @@ public class Training {
     @Column(name = "dia_treino", length = 2, nullable = false)
     private LocalDate trainingDay;
 
+    @ManyToOne
+    @JoinColumn(name = "cd_aluno")
+    private Member member;
+
     public Training() {
     }
 
@@ -38,5 +42,13 @@ public class Training {
 
     public void setTrainingDay(LocalDate trainingDay) {
         this.trainingDay = trainingDay;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
     }
 }
