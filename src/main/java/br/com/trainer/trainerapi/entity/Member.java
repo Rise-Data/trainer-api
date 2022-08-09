@@ -15,8 +15,8 @@ public class Member {
     @Column(name = "nm_aluno", length = 100, nullable = false)
     private String name;
 
-    @Column(name = "nr_telefone", length = 15, nullable = false)
-    private String cellphone;
+    @Column(name = "nr_telefone", length = 15, nullable = false, unique = true)
+    private String phone;
 
     @Column(name = "st_ativo", length = 1, nullable = false)
     private Boolean active;
@@ -27,10 +27,10 @@ public class Member {
     public Member() {
     }
 
-    public Member(Integer id, String name, String cellphone) {
+    public Member(Integer id, String name, String phone) {
         this.id = id;
         this.name = name;
-        this.cellphone = cellphone;
+        this.phone = phone;
         this.active = true;
         this.trainingSequence = 0;
     }
@@ -51,12 +51,12 @@ public class Member {
         this.name = name;
     }
 
-    public String getCellphone() {
-        return cellphone;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setCellphone(String cellphone) {
-        this.cellphone = cellphone;
+    public void setPhone(String cellphone) {
+        this.phone = cellphone;
     }
 
     public Boolean getActive() {
