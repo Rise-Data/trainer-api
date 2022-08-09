@@ -16,6 +16,9 @@ public class TrainingType {
     @Column(name = "nm_tipo_exercicio", length = 2, nullable = false)
     private LocalDate trainingDay;
 
+    @OneToOne(mappedBy = "trainingType", cascade = CascadeType.ALL)
+    private Exercise exercise;
+
     public TrainingType() {
     }
 
@@ -38,5 +41,13 @@ public class TrainingType {
 
     public void setTrainingDay(LocalDate trainingDay) {
         this.trainingDay = trainingDay;
+    }
+
+    public Exercise getExercise() {
+        return exercise;
+    }
+
+    public void setExercise(Exercise exercise) {
+        this.exercise = exercise;
     }
 }

@@ -36,6 +36,10 @@ public class Exercise {
     @JoinColumn(name = "cd_treino")
     private Training training;
 
+    @OneToOne
+    @JoinColumn(name = "cd_tipo_exercicio")
+    private TrainingType trainingType;
+
     public Exercise() {
     }
 
@@ -111,5 +115,13 @@ public class Exercise {
 
     public void setTraining(Training training) {
         this.training = training;
+    }
+
+    public TrainingType getTrainingType() {
+        return trainingType;
+    }
+
+    public void setTrainingType(TrainingType trainingType) {
+        this.trainingType = trainingType;
     }
 }
