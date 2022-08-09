@@ -21,8 +21,12 @@ public class Member {
     @Column(name = "st_ativo", length = 1, nullable = false)
     private Boolean active;
 
-    @Column(name = "nr_sequencia_treinos", length = 4, nullable = true)
+    @Column(name = "nr_sequencia_treinos", length = 4)
     private Integer trainingSequence;
+
+    @ManyToOne
+    @JoinColumn(name = "cd_trainer")
+    private Trainer trainer;
 
     public Member() {
     }
@@ -73,5 +77,13 @@ public class Member {
 
     public void setTrainingSequence(Integer trainingSequence) {
         this.trainingSequence = trainingSequence;
+    }
+
+    public Trainer getTrainer() {
+        return trainer;
+    }
+
+    public void setTrainer(Trainer trainer) {
+        this.trainer = trainer;
     }
 }
