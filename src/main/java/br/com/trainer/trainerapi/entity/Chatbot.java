@@ -15,6 +15,10 @@ public class Chatbot {
     @Column(name = "nm_chatbot", length = 100, nullable = false)
     private String name;
 
+    @OneToOne
+    @JoinColumn(name = "cd_trainer")
+    private Trainer trainer;
+
     public Chatbot() {
 
     }
@@ -38,6 +42,14 @@ public class Chatbot {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Trainer getTrainer() {
+        return trainer;
+    }
+
+    public void setTrainer(Trainer trainer) {
+        this.trainer = trainer;
     }
 
     @Override

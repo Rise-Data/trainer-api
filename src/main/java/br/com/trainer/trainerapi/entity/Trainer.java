@@ -1,6 +1,8 @@
 package br.com.trainer.trainerapi.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_trainer")
@@ -26,7 +28,14 @@ public class Trainer {
     @Column(name = "nr_telefone", length = 15, unique = true)
     private String phone;
 
+    @OneToOne(mappedBy = "trainer")
+    private Chatbot chatbot;
+
+    @OneToMany(mappedBy = "trainer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Member> members;
+
     public Trainer() {
+        this.members = new ArrayList<>();
     }
 
     public Trainer(Integer id, String user, String password, String email, String cpf, String phone) {
@@ -36,6 +45,12 @@ public class Trainer {
         this.email = email;
         this.cpf = cpf;
         this.phone = phone;
+        this.members = new ArrayList<>();
+    }
+
+    public void addMember(Member member) {
+        member.setTrainer(this);
+        this.members.add(member);
     }
 
     public Integer getId() {
@@ -84,5 +99,21 @@ public class Trainer {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public Chatbot getChatbot() {
+        return chatbot;
+    }
+
+    public void setChatbot(Chatbot chatbot) {
+        this.chatbot = chatbot;
+    }
+
+    public List<Member> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<Member> members) {
+        this.members = members;
     }
 }
