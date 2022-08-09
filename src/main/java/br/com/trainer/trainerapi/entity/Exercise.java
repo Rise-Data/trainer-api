@@ -20,17 +20,21 @@ public class Exercise {
     @Column(name = "TB_TIPO_EXERCICIO_cd_tipo_exercicio", length = 3, nullable = false)
     private Integer idExerciseType;
 
-    @Column(name = "nr_repeticoes", length = 3, nullable = true)
+    @Column(name = "nr_repeticoes", length = 3)
     private Integer repetitions;
 
-    @Column(name = "ds_exercicio", length = 255, nullable = false)
+    @Column(name = "ds_exercicio", nullable = false)
     private String description;
 
-    @Column(name = "ds_link_video_demonstrativo", length = 255, nullable = true)
+    @Column(name = "ds_link_video_demonstrativo")
     private String linkVideo;
 
     @Column(name = "nm_exercicio", length = 100, nullable = false)
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "cd_treino")
+    private Training training;
 
     public Exercise() {
     }
@@ -101,5 +105,11 @@ public class Exercise {
         this.name = name;
     }
 
+    public Training getTraining() {
+        return training;
+    }
 
+    public void setTraining(Training training) {
+        this.training = training;
+    }
 }
