@@ -15,6 +15,10 @@ public class Chatbot {
     @Column(name = "nm_chatbot", length = 100, nullable = false)
     private String name;
 
+    @OneToOne
+    @JoinColumn(name = "cd_trainer")
+    private Trainer trainer;
+
     public Chatbot() {
 
     }

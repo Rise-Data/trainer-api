@@ -26,6 +26,9 @@ public class Trainer {
     @Column(name = "nr_telefone", length = 15, unique = true)
     private String phone;
 
+    @OneToOne(mappedBy = "trainer")
+    private Chatbot chatbot;
+
     public Trainer() {
     }
 
