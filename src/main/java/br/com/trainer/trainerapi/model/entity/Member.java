@@ -1,4 +1,4 @@
-package br.com.trainer.trainerapi.entity;
+package br.com.trainer.trainerapi.model.entity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
