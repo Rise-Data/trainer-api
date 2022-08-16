@@ -20,7 +20,7 @@ public class Member {
     @Column(name = "nr_telefone", length = 15, nullable = false, unique = true)
     private String phone;
 
-    @Column(name = "st_ativo", length = 1, nullable = false)
+    @Column(name = "st_ativo", nullable = false)
     private Boolean active;
 
     @Column(name = "nr_sequencia_treinos", length = 4)
@@ -34,15 +34,25 @@ public class Member {
     private List<Training> trainings;
 
     public Member() {
+        this.active = false;
         this.trainings = new ArrayList<>();
+        this.trainingSequence = 0;
     }
 
     public Member(Integer id, String name, String phone) {
-        this.trainings = new ArrayList<>();
         this.id = id;
         this.name = name;
         this.phone = phone;
-        this.active = true;
+        this.active = false;
+        this.trainings = new ArrayList<>();
+        this.trainingSequence = 0;
+    }
+    public Member(String name, String phone, Trainer trainer) {
+        this.name = name;
+        this.phone = phone;
+        this.trainer = trainer;
+        this.active = false;
+        this.trainings = new ArrayList<>();
         this.trainingSequence = 0;
     }
 
