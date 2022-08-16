@@ -5,11 +5,12 @@ import br.com.trainer.trainerapi.model.entity.Training;
 import java.util.List;
 
 public record MemberResultDto(
+        Integer id,
         String name,
         String phone,
         Boolean active,
         Integer trainingSequence,
-        TrainerResultDto trainer,
+        Integer trainerId,
         List<Training> trainings
 ) {
 }
