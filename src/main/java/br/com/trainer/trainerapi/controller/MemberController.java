@@ -17,6 +17,7 @@ public class MemberController {
     @Autowired
     MemberService memberService;
 
+
     @GetMapping("/api/member")
     public ResponseEntity<RequestResultDto> getAllMembers() {
         try {
@@ -69,7 +70,6 @@ public class MemberController {
         }
     }
 
-    @DeleteMapping("/api/member/{id}")
     public ResponseEntity<RequestResultDto> removeMember(@PathVariable Integer id) {
         try {
             memberService.deleteMember(id);
