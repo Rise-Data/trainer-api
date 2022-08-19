@@ -1,6 +1,7 @@
 package br.com.trainer.trainerapi.controller;
 
 import br.com.trainer.trainerapi.model.dto.RequestResultDto;
+import br.com.trainer.trainerapi.model.dto.TrainerResultDto;
 import br.com.trainer.trainerapi.model.entity.Trainer;
 import br.com.trainer.trainerapi.service.TrainerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,7 @@ public class TrainerController {
         }
     }
 
+    @DeleteMapping("/api/trainer/{id}")
     public ResponseEntity<RequestResultDto> deleteTrainer(@PathVariable Integer id) {
         try {
             trainerService.deleteTrainer(id);
