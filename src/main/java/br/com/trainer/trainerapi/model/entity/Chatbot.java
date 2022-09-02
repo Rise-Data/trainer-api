@@ -28,8 +28,8 @@ public class Chatbot {
         this.name = name;
     }
 
-    public Chatbot(String name, Trainer chatbotOfTrainer) {
-    }
+
+
 
     public Integer getId() {
         return id;

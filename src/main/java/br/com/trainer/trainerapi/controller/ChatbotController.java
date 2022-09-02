@@ -1,7 +1,7 @@
 package br.com.trainer.trainerapi.controller;
 
-import br.com.trainer.trainerapi.model.dto.ChatbotResultDto;
 import br.com.trainer.trainerapi.model.dto.RequestResultDto;
+import br.com.trainer.trainerapi.model.entity.Chatbot;
 import br.com.trainer.trainerapi.service.ChatbotService;
 import br.com.trainer.trainerapi.model.dto.ChatbotInputDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class ChatbotController {
     @GetMapping("/api/chatbot/{trainerId}")
     public ResponseEntity<RequestResultDto> getchatbotByTrainer(@PathVariable Integer trainerId) {
         try {
-            List<ChatbotResultDto> resultDtos = chatbotService.listChatbotByTrainer(trainerId);
+            List<Chatbot> resultDtos = chatbotService.listChatbotByTrainer(trainerId);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new RequestResultDto(resultDtos, false, null));
         } catch (Exception ex) {
