@@ -52,8 +52,22 @@ public class ChatbotController {
         }
     }
 
+    @GetMapping("/api/chatbot/{id}")
+    public ResponseEntity<RequestResultDto> updateChatbot(@RequestBody ChatbotInputDto chatbot, @PathVariable Integer id) {
+        try {
+            chatbotService.updateChatbot(chatbot, id);
+            return  ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new RequestResultDto(null,false,null));
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new RequestResultDto(null,true, ex.getMessage()));
+        }
 
-    @DeleteMapping
+    }
+
+
+    @DeleteMapping("/api/chatbot/{id}")
     public ResponseEntity<RequestResultDto> deleteChatbot(@PathVariable Integer id) {
         try {
             chatbotService.deleteChatbot(id);
