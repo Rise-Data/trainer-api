@@ -52,6 +52,21 @@ public class ChatbotController {
         }
     }
 
+    @GetMapping("/api/chatbot/{chatbotId}")
+    public  ResponseEntity<RequestResultDto> getChabot(@PathVariable Integer id) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new RequestResultDto(chatbotService.listChatbotbyId(id),false,null));
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new RequestResultDto(null,true, ex.getMessage()));
+
+        }
+    }
+
+
+
     @GetMapping("/api/chatbot/{id}")
     public ResponseEntity<RequestResultDto> updateChatbot(@RequestBody ChatbotInputDto chatbot, @PathVariable Integer id) {
         try {

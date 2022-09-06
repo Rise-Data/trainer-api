@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ChatbotService {
@@ -40,6 +41,11 @@ public class ChatbotService {
 
         var trainer = trainerRepository.findById(trainerId).orElseThrow(() -> new RowNotFoundException("Trainer Not Found"));
         return  chatbotRepository.findByTrainer(trainer.getId());
+    }
+
+    public Optional<Chatbot> listChatbotbyId(Integer id) throws  RowNotFoundException {
+        var chatbotid = chatbotRepository.findById(id).orElseThrow(() -> new RuntimeException("Chatbot Not found"));
+        return  chatbotRepository.findById(chatbotid.getId());
     }
 
     public void updateChatbot (ChatbotInputDto chatbot, Integer id) throws RowNotFoundException {
