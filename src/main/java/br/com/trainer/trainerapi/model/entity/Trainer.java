@@ -48,6 +48,14 @@ public class Trainer {
         this.members = new ArrayList<>();
     }
 
+    public Trainer(String user, String password, String email, String cpf, String phone) {
+        this.user = user;
+        this.password = password;
+        this.email = email;
+        this.cpf = cpf;
+        this.phone = phone;
+    }
+
     public void addMember(Member member) {
         member.setTrainer(this);
         this.members.add(member);

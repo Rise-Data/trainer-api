@@ -1,7 +1,9 @@
 package br.com.trainer.trainerapi.controller;
 
 import br.com.trainer.trainerapi.model.dto.RequestResultDto;
+import br.com.trainer.trainerapi.model.dto.TrainerInputDto;
 import br.com.trainer.trainerapi.model.dto.TrainerResultDto;
+import br.com.trainer.trainerapi.model.dto.TrainerUpdatableInputDto;
 import br.com.trainer.trainerapi.model.entity.Trainer;
 import br.com.trainer.trainerapi.service.TrainerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,7 @@ public class TrainerController {
     }
 
     @PostMapping("/api/trainer")
-    public ResponseEntity<RequestResultDto> createTrainer(@RequestBody Trainer trainer) {
+    public ResponseEntity<RequestResultDto> createTrainer(@RequestBody TrainerInputDto trainer) {
         try {
             trainerService.registerTrainer(trainer);
             return ResponseEntity.status(HttpStatus.CREATED).body(new RequestResultDto(null, false, null));
@@ -42,7 +44,7 @@ public class TrainerController {
     }
 
     @PutMapping("/api/trainer/{id}")
-    public ResponseEntity<RequestResultDto> updateTrainer(@RequestBody Trainer trainer, @PathVariable Integer id) {
+    public ResponseEntity<RequestResultDto> updateTrainer(@RequestBody TrainerUpdatableInputDto trainer, @PathVariable Integer id) {
         try {
             trainerService.updateTrainer(trainer, id);
             return ResponseEntity.status(HttpStatus.CREATED).body(new RequestResultDto(null, false, null));

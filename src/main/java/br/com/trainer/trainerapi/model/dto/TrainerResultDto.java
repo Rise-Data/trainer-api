@@ -6,9 +6,10 @@ import br.com.trainer.trainerapi.model.entity.Member;
 import java.util.List;
 
 public record TrainerResultDto(
+        Integer id,
         String user,
         String email,
         String phone,
-        List<Member> members,
-        Chatbot chatbot) {
+        List<Integer> membersIds,
+        Integer chatbotId) {
 }
