@@ -45,6 +45,15 @@ public class Exercise {
         this.name = name;
     }
 
+    public Exercise(Integer repetitions, String description, String linkVideo, String name, Training training, TrainingType trainingType) {
+        this.repetitions = repetitions;
+        this.description = description;
+        this.linkVideo = linkVideo;
+        this.name = name;
+        this.training = training;
+        this.trainingType = trainingType;
+    }
+
     public Integer getId() {
         return Id;
     }

@@ -1,23 +1,27 @@
 package br.com.trainer.trainerapi.controller;
 
 import br.com.trainer.trainerapi.model.dto.RequestResultDto;
-import br.com.trainer.trainerapi.model.dto.TrainerResultDto;
-import br.com.trainer.trainerapi.model.entity.Trainer;
+import br.com.trainer.trainerapi.model.dto.trainer.TrainerInputDto;
+import br.com.trainer.trainerapi.model.dto.trainer.TrainerUpdatableInputDto;
 import br.com.trainer.trainerapi.service.TrainerService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController()
 public class TrainerController {
 
-    @Autowired
-    private TrainerService trainerService;
+    private final TrainerService trainerService;
+    public TrainerController(TrainerService trainerService) {
+        this.trainerService = trainerService;
+    }
 
     @GetMapping("/api/trainer")
-    public ResponseEntity<RequestResultDto> getAllTrainers() {
-        return ResponseEntity.status(HttpStatus.OK).body(new RequestResultDto(trainerService.listAllTrainers(), false, null));
+    public ResponseEntity<RequestResultDto> getAllTrainers(@PageableDefault Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(new RequestResultDto(trainerService.listAllTrainers(pageable), false, null));
     }
 
     @GetMapping("/api/trainer/{id}")
@@ -31,7 +35,7 @@ public class TrainerController {
     }
 
     @PostMapping("/api/trainer")
-    public ResponseEntity<RequestResultDto> createTrainer(@RequestBody Trainer trainer) {
+    public ResponseEntity<RequestResultDto> createTrainer(@RequestBody TrainerInputDto trainer) {
         try {
             trainerService.registerTrainer(trainer);
             return ResponseEntity.status(HttpStatus.CREATED).body(new RequestResultDto(null, false, null));
@@ -42,7 +46,7 @@ public class TrainerController {
     }
 
     @PutMapping("/api/trainer/{id}")
-    public ResponseEntity<RequestResultDto> updateTrainer(@RequestBody Trainer trainer, @PathVariable Integer id) {
+    public ResponseEntity<RequestResultDto> updateTrainer(@RequestBody TrainerUpdatableInputDto trainer, @PathVariable Integer id) {
         try {
             trainerService.updateTrainer(trainer, id);
             return ResponseEntity.status(HttpStatus.CREATED).body(new RequestResultDto(null, false, null));

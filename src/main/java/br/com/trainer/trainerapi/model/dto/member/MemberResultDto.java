@@ -1,4 +1,4 @@
-package br.com.trainer.trainerapi.model.dto;
+package br.com.trainer.trainerapi.model.dto.member;
 
 import br.com.trainer.trainerapi.model.entity.Training;
 
