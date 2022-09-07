@@ -1,4 +1,4 @@
-package br.com.trainer.trainerapi.model.dto;
+package br.com.trainer.trainerapi.model.dto.trainer;
 
 public record TrainerInputDto(
         String user,

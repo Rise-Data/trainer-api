@@ -1,4 +1,4 @@
-package br.com.trainer.trainerapi.model.dto;
+package br.com.trainer.trainerapi.model.dto.trainer;
 
 import br.com.trainer.trainerapi.model.entity.Chatbot;
 import br.com.trainer.trainerapi.model.entity.Member;
@@ -10,6 +10,5 @@ public record TrainerResultDto(
         String user,
         String email,
         String phone,
-        List<Integer> membersIds,
-        Integer chatbotId) {
+        List<Integer> membersIds) {
 }

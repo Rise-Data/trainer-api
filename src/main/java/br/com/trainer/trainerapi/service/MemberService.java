@@ -1,27 +1,29 @@
 package br.com.trainer.trainerapi.service;
 
 import br.com.trainer.trainerapi.exception.RowNotFoundException;
-import br.com.trainer.trainerapi.model.dto.MemberInputDto;
-import br.com.trainer.trainerapi.model.dto.MemberResultDto;
+import br.com.trainer.trainerapi.model.dto.member.MemberInputDto;
+import br.com.trainer.trainerapi.model.dto.member.MemberResultDto;
 import br.com.trainer.trainerapi.model.entity.Member;
-import br.com.trainer.trainerapi.model.entity.Trainer;
 import br.com.trainer.trainerapi.model.repository.MemberRepository;
 import br.com.trainer.trainerapi.model.repository.TrainerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class MemberService {
-    @Autowired
-    private MemberRepository memberRepository;
-    @Autowired
-    private TrainerRepository trainerRepository;
 
-    public List<MemberResultDto> listAllMembers() {
-        List<Member> members = memberRepository.findAll();
-        return members
+    private final MemberRepository memberRepository;
+    private final TrainerRepository trainerRepository;
+
+    public MemberService(MemberRepository memberRepository, TrainerRepository trainerRepository) {
+        this.memberRepository = memberRepository;
+        this.trainerRepository = trainerRepository;
+    }
+
+    public Page<MemberResultDto> listAllMembers(Pageable pageable) {
+        return  new PageImpl<MemberResultDto>(memberRepository.findAll(pageable)
                 .stream()
                 .map(m -> new MemberResultDto(
                         m.getId(),
@@ -30,19 +32,12 @@ public class MemberService {
                         m.getActive(),
                         m.getTrainingSequence(),
                         m.getTrainer().getId(),
-                        m.getTrainings())).toList();
+                        m.getTrainings())).toList());
     }
 
-    public List<MemberResultDto> listMembersByTrainer(Integer trainerId) throws RowNotFoundException {
-        Trainer trainer;
-        if (trainerRepository.findById(trainerId).isPresent()) {
-            trainer = trainerRepository.findById(trainerId).get();
-        } else {
-            throw new RowNotFoundException("Trainer not found");
-        }
-
-        List<Member> members = memberRepository.findByTrainer(trainer);
-        return members
+    public Page<MemberResultDto> listMembersByTrainer(Pageable pageable, Integer trainerId) throws RowNotFoundException {
+        var trainer = trainerRepository.findById(trainerId).orElseThrow(() -> new RowNotFoundException("Trainer not found"));
+        return new PageImpl<MemberResultDto>(memberRepository.findByTrainer(trainer, pageable)
                 .stream()
                 .map(m -> new MemberResultDto(
                         m.getId(),
@@ -51,50 +46,34 @@ public class MemberService {
                         m.getActive(),
                         m.getTrainingSequence(),
                         m.getTrainer().getId(),
-                        m.getTrainings())).toList();
+                        m.getTrainings())).toList());
     }
 
-    public void addMember(MemberInputDto member) throws RowNotFoundException {
-        if (member == null) {
+    public void addMember(MemberInputDto memberInput) throws RowNotFoundException {
+        if (memberInput == null)
             throw new NullPointerException("Member can't be null");
-        }
 
-        if (member.trainerId() == null) {
+        if (memberInput.trainerId() == null)
             throw new NullPointerException("TrainerId can't be null");
-        }
 
-        Trainer trainerOfMember;
-
-        if (trainerRepository.findById(member.trainerId()).isPresent()) {
-            trainerOfMember = trainerRepository.findById(member.trainerId()).get();
-
-        } else {
-            throw new RowNotFoundException("Trainer not found");
-        }
-        Member memberEntity = new Member(member.name(), member.phone(), trainerOfMember);
-        memberRepository.save(memberEntity);
+        var trainer = trainerRepository.findById(memberInput.trainerId()).orElseThrow(() -> new RowNotFoundException("Trainer not found"));
+        Member member = new Member(memberInput.name(), memberInput.phone(), trainer);
+        memberRepository.save(member);
     }
 
-    public void updateMember(MemberInputDto member, Integer id) throws RowNotFoundException {
-        if (member == null) {
+    public void updateMember(MemberInputDto memberInput, Integer id) throws RowNotFoundException {
+        if (memberInput == null)
             throw new NullPointerException("Member can't be null");
-        }
-        if (memberRepository.findById(id).isPresent()) {
-            Member memberEntity = memberRepository.findById(id).get();
-            memberEntity.setName(member.name());
-            memberEntity.setPhone(member.phone());
-            memberEntity.setTrainings(member.trainings());
-            memberRepository.save(memberEntity);
-        } else {
-            throw new RowNotFoundException("Member not found");
-        }
+
+        var member = memberRepository.findById(id).orElseThrow(() -> new RowNotFoundException("Member not found"));
+        member.setName(memberInput.name());
+        member.setPhone(memberInput.phone());
+        member.setTrainings(memberInput.trainings());
+        memberRepository.save(member);
     }
 
     public void deleteMember(Integer id) throws RowNotFoundException {
-        if (memberRepository.findById(id).isPresent()) {
-            memberRepository.deleteById(id);
-        } else {
-            throw new RowNotFoundException("Member not found");
-        }
+        var member = memberRepository.findById(id).orElseThrow(() -> new RowNotFoundException("Member not found"));
+        memberRepository.delete(member);
     }
 }

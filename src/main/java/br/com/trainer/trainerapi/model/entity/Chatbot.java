@@ -28,8 +28,9 @@ public class Chatbot {
         this.name = name;
     }
 
-    public Chatbot(String name) {
+    public Chatbot(String name, Trainer trainer) {
         this.name = name;
+        this.trainer = trainer;
     }
 
     public Integer getId() {

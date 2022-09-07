@@ -1,21 +1,24 @@
 package br.com.trainer.trainerapi.service;
 
 import br.com.trainer.trainerapi.exception.RowNotFoundException;
-import br.com.trainer.trainerapi.model.dto.TrainerInputDto;
-import br.com.trainer.trainerapi.model.dto.TrainerResultDto;
-import br.com.trainer.trainerapi.model.dto.TrainerUpdatableInputDto;
+import br.com.trainer.trainerapi.model.dto.trainer.TrainerInputDto;
+import br.com.trainer.trainerapi.model.dto.trainer.TrainerResultDto;
+import br.com.trainer.trainerapi.model.dto.trainer.TrainerUpdatableInputDto;
 import br.com.trainer.trainerapi.model.entity.Member;
 import br.com.trainer.trainerapi.model.entity.Trainer;
 import br.com.trainer.trainerapi.model.repository.TrainerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class TrainerService {
-    @Autowired
-    private TrainerRepository trainerRepository;
+    private final TrainerRepository trainerRepository;
+
+    public TrainerService(TrainerRepository trainerRepository) {
+        this.trainerRepository = trainerRepository;
+    }
 
     public void registerTrainer(TrainerInputDto trainer) {
         validateTrainerInput(trainer);
@@ -23,17 +26,16 @@ public class TrainerService {
         trainerRepository.save(trainerEntity);
     }
 
-    public List<TrainerResultDto> listAllTrainers() {
-        return trainerRepository.findAll()
+    public Page<TrainerResultDto> listAllTrainers(Pageable pageable) {
+        return new PageImpl<TrainerResultDto>(trainerRepository.findAll(pageable)
                 .stream()
                 .map(t -> new TrainerResultDto(
                         t.getId(),
                         t.getUser(),
                         t.getEmail(),
                         t.getPhone(),
-                        t.getMembers().stream().map(Member::getId).toList(),
-                        t.getChatbot().getId()
-                )).toList();
+                        t.getMembers().stream().map(Member::getId).toList()
+                )).toList());
     }
 
     public void updateTrainer(TrainerUpdatableInputDto trainer, Integer id) throws RowNotFoundException {
@@ -61,8 +63,7 @@ public class TrainerService {
                     trainerEntity.getUser(),
                     trainerEntity.getEmail(),
                     trainerEntity.getPhone(),
-                    trainerEntity.getMembers().stream().map(Member::getId).toList(),
-                    trainerEntity.getChatbot().getId()
+                    trainerEntity.getMembers().stream().map(Member::getId).toList()
             );
         }
 
@@ -70,11 +71,8 @@ public class TrainerService {
     }
 
     public void deleteTrainer(Integer id) throws RowNotFoundException {
-        if (trainerRepository.findById(id).isEmpty()) {
-            throw new RowNotFoundException("Trainer not found");
-        }
-
-        trainerRepository.deleteById(id);
+        var trainer = trainerRepository.findById(id).orElseThrow(() -> new RowNotFoundException("Trainer not found"));
+        trainerRepository.delete(trainer);
     }
 
     private void validateTrainerInput(TrainerInputDto trainer) {
