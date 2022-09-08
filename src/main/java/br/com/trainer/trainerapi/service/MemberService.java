@@ -31,8 +31,8 @@ public class MemberService {
                         m.getPhone(),
                         m.getActive(),
                         m.getTrainingSequence(),
-                        m.getTrainer().getId(),
-                        m.getTrainings())).toList());
+                        m.getTrainer().getId()))
+                .toList());
     }
 
     public Page<MemberResultDto> listMembersByTrainer(Pageable pageable, Integer trainerId) throws RowNotFoundException {
@@ -45,8 +45,8 @@ public class MemberService {
                         m.getPhone(),
                         m.getActive(),
                         m.getTrainingSequence(),
-                        m.getTrainer().getId(),
-                        m.getTrainings())).toList());
+                        m.getTrainer().getId()))
+                .toList());
     }
 
     public void addMember(MemberInputDto memberInput) throws RowNotFoundException {
