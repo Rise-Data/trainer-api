@@ -35,6 +35,11 @@ public class Training {
         this.trainingDay = trainingDay;
     }
 
+    public Training(LocalDate trainingDay, Member member) {
+        this.trainingDay = trainingDay;
+        this.member = member;
+    }
+
     public void addExercise(Exercise exercise) {
         exercise.setTraining(this);
         this.exercises.add(exercise);
