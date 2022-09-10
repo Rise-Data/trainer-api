@@ -85,11 +85,16 @@ public class ExerciseService {
         if (exerciseInput.description() == null)
             throw new NullPointerException("description can't be null");
 
+        if (exerciseInput.trainingType() == null)
+            throw new NullPointerException("trainingTypeId can't be null");
+
+        var trainingType = trainingTypeRepository.findById(exerciseInput.trainingType()).orElseThrow(() -> new RowNotFoundException("TrainingType not found"));
         var exercise = exerciseRepository.findById(id).orElseThrow(() -> new RowNotFoundException("Exercise not found"));
         exercise.setName(exerciseInput.name());
         exercise.setDescription(exerciseInput.description());
         exercise.setLinkVideo(exerciseInput.videoLink());
         exercise.setRepetitions(exerciseInput.repetitions());
+        exercise.setTrainingType(trainingType);
         exerciseRepository.save(exercise);
     }
 
