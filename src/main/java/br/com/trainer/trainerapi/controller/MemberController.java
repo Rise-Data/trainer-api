@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/member")
 public class MemberController {
 
     private final MemberService memberService;
@@ -20,7 +21,7 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @GetMapping("/api/member")
+    @GetMapping
     public ResponseEntity<RequestResultDto> getAllMembers(@PageableDefault Pageable pageable) {
         try {
             Page<MemberResultDto> result = memberService.listAllMembers(pageable);
@@ -31,7 +32,7 @@ public class MemberController {
         }
     }
 
-    @GetMapping("/api/member/{trainerId}")
+    @GetMapping("{trainerId}")
     public ResponseEntity<RequestResultDto> getMembersByTrainer(@PageableDefault Pageable pageable, @PathVariable Integer trainerId) {
         try {
             Page<MemberResultDto> resultDtos = memberService.listMembersByTrainer(pageable, trainerId);
@@ -42,7 +43,7 @@ public class MemberController {
         }
     }
 
-    @PostMapping("/api/member")
+    @PostMapping
     public ResponseEntity<RequestResultDto> createMember(@RequestBody MemberInputDto member) {
         try {
             memberService.addMember(member);
@@ -53,7 +54,7 @@ public class MemberController {
         }
     }
 
-    @PutMapping("/api/member/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<RequestResultDto> updateMember(@RequestBody MemberInputDto member, @PathVariable Integer id) {
         try {
             memberService.updateMember(member, id);
@@ -64,7 +65,7 @@ public class MemberController {
         }
     }
 
-    @DeleteMapping("/api/member/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<RequestResultDto> removeMember(@PathVariable Integer id) {
         try {
             memberService.deleteMember(id);

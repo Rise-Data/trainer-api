@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/training")
 public class TrainingController {
     private final TrainingService trainingService;
 
@@ -18,7 +19,7 @@ public class TrainingController {
         this.trainingService = trainingService;
     }
 
-    @GetMapping("/api/training")
+    @GetMapping
     public ResponseEntity<RequestResultDto> getAllTrainings(Pageable pageable) {
         try {
             var result = trainingService.listAllTrainings(pageable);
@@ -29,7 +30,7 @@ public class TrainingController {
         }
     }
 
-    @GetMapping("/api/training/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<RequestResultDto> getTrainingById(@PathVariable Integer id) {
         try {
             var result = trainingService.listTraining(id);
@@ -40,7 +41,7 @@ public class TrainingController {
         }
     }
 
-    @GetMapping("/api/training/member/{memberId}")
+    @GetMapping("/member/{memberId}")
     public ResponseEntity<RequestResultDto> getTrainingsByMember(@PageableDefault Pageable pageable, @PathVariable Integer memberId) {
         try {
             var result = trainingService.listTrainingsByMember(pageable, memberId);
@@ -51,7 +52,7 @@ public class TrainingController {
         }
     }
 
-    @PostMapping("/api/training")
+    @PostMapping
     public ResponseEntity<RequestResultDto> createTraining(@RequestBody TrainingInputDto training) {
         try {
             trainingService.addTraining(training);
@@ -62,7 +63,7 @@ public class TrainingController {
         }
     }
 
-    @PutMapping("/api/training/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<RequestResultDto> updateTraining(@RequestBody TrainingUpdateInputDto training, @PathVariable Integer id) {
         try {
             trainingService.updateTraining(training, id);
@@ -73,7 +74,7 @@ public class TrainingController {
         }
     }
 
-    @DeleteMapping("/api/training/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<RequestResultDto> deleteTraining(@PathVariable Integer id) {
         try {
             trainingService.deleteTraining(id);
