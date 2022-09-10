@@ -13,13 +13,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController()
+@RequestMapping("/api/exercise")
 public class ExerciseController {
     ExerciseService exerciseService;
     public ExerciseController(ExerciseService exerciseService) {
         this.exerciseService = exerciseService;
     }
 
-    @GetMapping("/api/exercise")
+    @GetMapping
     public ResponseEntity<RequestResultDto> getAllExercises(@PageableDefault Pageable pageable) {
         try {
             Page<ExerciseResultDto> resultDto = exerciseService.listAllExercises(pageable);
@@ -30,7 +31,7 @@ public class ExerciseController {
         }
     }
 
-    @PostMapping("/api/exercise")
+    @PostMapping
     public ResponseEntity<RequestResultDto> createExercise(@RequestBody ExerciseInputDto exercise) {
         try {
             exerciseService.addExercise(exercise);
@@ -41,7 +42,7 @@ public class ExerciseController {
         }
     }
 
-    @PutMapping("/api/exercise/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<RequestResultDto> updateExercise(@RequestBody ExerciseUpdateInputDto exercise, @PathVariable Integer id) {
         try {
             exerciseService.updateExercise(exercise, id);
@@ -52,7 +53,7 @@ public class ExerciseController {
         }
     }
 
-    @DeleteMapping("/api/exercise/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<RequestResultDto> removeExercise(@PathVariable Integer id) {
         try {
             exerciseService.deleteExercise(id);

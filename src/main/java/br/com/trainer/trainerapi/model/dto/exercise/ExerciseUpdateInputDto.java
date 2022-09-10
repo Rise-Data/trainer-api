@@ -4,6 +4,7 @@ public record ExerciseUpdateInputDto(
         String name,
         Integer repetitions,
         String videoLink,
-        String description
+        String description,
+        Integer trainingType
 ) {
 }

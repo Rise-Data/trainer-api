@@ -11,9 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
+@RequestMapping("/api/chatbot")
 public class ChatbotController {
 
     private final ChatbotService chatbotService;
@@ -22,12 +21,12 @@ public class ChatbotController {
         this.chatbotService = chatbotService;
     }
 
-    @GetMapping("/api/chatbot")
+    @GetMapping
     public ResponseEntity<RequestResultDto> getAllChatbots(@PageableDefault Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(new RequestResultDto(chatbotService.listAllChatbots(pageable), false, null));
     }
 
-    @GetMapping("/api/chatbot/trainer/{trainerId}")
+    @GetMapping("/trainer/{trainerId}")
     public ResponseEntity<RequestResultDto> getchatbotByTrainer(@PathVariable Integer trainerId) {
         try {
             ChatbotResultDto result = chatbotService.listChatbotByTrainer(trainerId);
@@ -38,7 +37,7 @@ public class ChatbotController {
         }
     }
 
-    @GetMapping("/api/chatbot/{chatbotId}")
+    @GetMapping("{chatbotId}")
     public  ResponseEntity<RequestResultDto> getChabot(@PathVariable Integer chatbotId) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(new RequestResultDto(chatbotService.listChatbotbyId(chatbotId),false,null));
@@ -49,7 +48,7 @@ public class ChatbotController {
         }
     }
 
-    @PostMapping("/api/chatbot")
+    @PostMapping
     public ResponseEntity<RequestResultDto> createChatbot(@RequestBody ChatbotInputDto chatbot) {
         try {
             chatbotService.registerChatbot(chatbot);
@@ -60,7 +59,7 @@ public class ChatbotController {
         }
     }
 
-    @PutMapping("/api/chatbot/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<RequestResultDto> updateChatbot(@RequestBody ChatbotUpdateInputDto chatbot, @PathVariable Integer id) {
         try {
             chatbotService.updateChatbot(chatbot, id);
@@ -71,7 +70,7 @@ public class ChatbotController {
         }
     }
 
-    @DeleteMapping("/api/chatbot/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<RequestResultDto> deleteChatbot(@PathVariable Integer id) {
         try {
             chatbotService.deleteChatbot(id);

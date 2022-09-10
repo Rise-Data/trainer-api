@@ -1,7 +1,6 @@
 package br.com.trainer.trainerapi.model.entity;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 @Table(name = "tb_tipo_exercicio")
@@ -14,7 +13,7 @@ public class TrainingType {
     private Integer id;
 
     @Column(name = "nm_tipo_exercicio", length = 2, nullable = false)
-    private LocalDate trainingDay;
+    private String name;
 
     @OneToOne(mappedBy = "trainingType", cascade = CascadeType.ALL)
     private Exercise exercise;
@@ -22,9 +21,13 @@ public class TrainingType {
     public TrainingType() {
     }
 
-    public TrainingType(Integer id, LocalDate trainingDay) {
+    public TrainingType(Integer id, String name) {
         this.id = id;
-        this.trainingDay = trainingDay;
+        this.name = name;
+    }
+
+    public TrainingType(String name) {
+        this.name = name;
     }
 
     public Integer getId() {
@@ -35,12 +38,12 @@ public class TrainingType {
         this.id = id;
     }
 
-    public LocalDate getTrainingDay() {
-        return trainingDay;
+    public String getName() {
+        return name;
     }
 
-    public void setTrainingDay(LocalDate trainingDay) {
-        this.trainingDay = trainingDay;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Exercise getExercise() {

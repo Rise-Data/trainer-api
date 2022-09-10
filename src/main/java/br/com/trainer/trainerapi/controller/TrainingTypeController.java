@@ -1,10 +1,8 @@
 package br.com.trainer.trainerapi.controller;
 
-import br.com.trainer.trainerapi.model.dto.member.MemberInputDto;
-import br.com.trainer.trainerapi.model.dto.member.MemberResultDto;
 import br.com.trainer.trainerapi.model.dto.RequestResultDto;
-import br.com.trainer.trainerapi.service.MemberService;
-import org.springframework.data.domain.Page;
+import br.com.trainer.trainerapi.model.dto.trainingType.TrainingTypeInput;
+import br.com.trainer.trainerapi.service.TrainingTypeService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -12,66 +10,64 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/member")
-public class MemberController {
+@RequestMapping("/api/trainingType")
+public class TrainingTypeController {
+    private final TrainingTypeService trainingTypeService;
 
-    private final MemberService memberService;
-
-    public MemberController(MemberService memberService) {
-        this.memberService = memberService;
+    public TrainingTypeController(TrainingTypeService trainingTypeService) {
+        this.trainingTypeService = trainingTypeService;
     }
 
     @GetMapping
-    public ResponseEntity<RequestResultDto> getAllMembers(@PageableDefault Pageable pageable) {
+    public ResponseEntity<RequestResultDto> getAllTrainingTypes(@PageableDefault Pageable pageable) {
         try {
-            Page<MemberResultDto> result = memberService.listAllMembers(pageable);
+            var result = trainingTypeService.listAllTrainingTypes(pageable);
             return ResponseEntity.status(HttpStatus.OK).body(new RequestResultDto(result, false, null));
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            ex.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RequestResultDto(null, true, ex.getMessage()));
         }
     }
 
-    @GetMapping("{trainerId}")
-    public ResponseEntity<RequestResultDto> getMembersByTrainer(@PageableDefault Pageable pageable, @PathVariable Integer trainerId) {
+    @GetMapping("{id}")
+    public ResponseEntity<RequestResultDto> getTrainingTypeById(@PathVariable Integer id) {
         try {
-            Page<MemberResultDto> resultDtos = memberService.listMembersByTrainer(pageable, trainerId);
-            return ResponseEntity.status(HttpStatus.OK).body(new RequestResultDto(resultDtos, false, null));
+            var result = trainingTypeService.listTrainingType(id);
+            return ResponseEntity.status(HttpStatus.OK).body(new RequestResultDto(result, false, null));
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            ex.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RequestResultDto(null, true, ex.getMessage()));
         }
     }
 
     @PostMapping
-    public ResponseEntity<RequestResultDto> createMember(@RequestBody MemberInputDto member) {
+    public ResponseEntity<RequestResultDto> createTrainingType(@RequestBody TrainingTypeInput input) {
         try {
-            memberService.addMember(member);
+            trainingTypeService.addTrainingType(input);
             return ResponseEntity.status(HttpStatus.CREATED).body(new RequestResultDto(null, false, null));
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            ex.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RequestResultDto(null, true, ex.getMessage()));
         }
     }
-
     @PutMapping("{id}")
-    public ResponseEntity<RequestResultDto> updateMember(@RequestBody MemberInputDto member, @PathVariable Integer id) {
+    public ResponseEntity<RequestResultDto> updateTrainingType(@RequestBody TrainingTypeInput input, @PathVariable Integer id) {
         try {
-            memberService.updateMember(member, id);
+            trainingTypeService.updateTrainingType(input, id);
             return ResponseEntity.status(HttpStatus.CREATED).body(new RequestResultDto(null, false, null));
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            ex.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RequestResultDto(null, true, ex.getMessage()));
         }
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<RequestResultDto> removeMember(@PathVariable Integer id) {
+    public ResponseEntity<RequestResultDto> deleteTrainingType(Integer id) {
         try {
-            memberService.deleteMember(id);
+            trainingTypeService.deleteTrainingType(id);
             return ResponseEntity.status(HttpStatus.OK).body(new RequestResultDto(null, false, null));
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            ex.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RequestResultDto(null, true, ex.getMessage()));
         }
     }

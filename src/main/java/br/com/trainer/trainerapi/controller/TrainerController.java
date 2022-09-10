@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController()
+@RequestMapping("/api/trainer")
 public class TrainerController {
 
     private final TrainerService trainerService;
@@ -19,12 +20,12 @@ public class TrainerController {
         this.trainerService = trainerService;
     }
 
-    @GetMapping("/api/trainer")
+    @GetMapping
     public ResponseEntity<RequestResultDto> getAllTrainers(@PageableDefault Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(new RequestResultDto(trainerService.listAllTrainers(pageable), false, null));
     }
 
-    @GetMapping("/api/trainer/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<RequestResultDto> getTrainer(@PathVariable Integer id) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(new RequestResultDto(trainerService.listTrainer(id), false, null));
@@ -34,7 +35,7 @@ public class TrainerController {
         }
     }
 
-    @PostMapping("/api/trainer")
+    @PostMapping
     public ResponseEntity<RequestResultDto> createTrainer(@RequestBody TrainerInputDto trainer) {
         try {
             trainerService.registerTrainer(trainer);
@@ -45,7 +46,7 @@ public class TrainerController {
         }
     }
 
-    @PutMapping("/api/trainer/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<RequestResultDto> updateTrainer(@RequestBody TrainerUpdatableInputDto trainer, @PathVariable Integer id) {
         try {
             trainerService.updateTrainer(trainer, id);
@@ -56,7 +57,7 @@ public class TrainerController {
         }
     }
 
-    @DeleteMapping("/api/trainer/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<RequestResultDto> deleteTrainer(@PathVariable Integer id) {
         try {
             trainerService.deleteTrainer(id);
