@@ -33,7 +33,7 @@ public class ExerciseService {
                         m.getName(),
                         m.getRepetitions(),
                         m.getTraining().getId(),
-                        m.getTrainingType().getId(),
+                        m.getExerciseType().getId(),
                         m.getDescription(),
                         m.getLinkVideo())).toList());
     }
@@ -61,6 +61,7 @@ public class ExerciseService {
         var training = trainingRepository.findById(exerciseInput.training()).orElseThrow(() -> new RowNotFoundException("Training not found"));
         var exercise = new Exercise(
                 exerciseInput.repetitions(),
+                exerciseInput.duration(),
                 exerciseInput.description(),
                 exerciseInput.videoLink(),
                 exerciseInput.name(),
@@ -88,13 +89,14 @@ public class ExerciseService {
         if (exerciseInput.trainingType() == null)
             throw new NullPointerException("trainingTypeId can't be null");
 
-        var trainingType = exerciseTypeRepository.findById(exerciseInput.trainingType()).orElseThrow(() -> new RowNotFoundException("ExerciseType not found"));
+        var exerciseType = exerciseTypeRepository.findById(exerciseInput.trainingType()).orElseThrow(() -> new RowNotFoundException("ExerciseType not found"));
         var exercise = exerciseRepository.findById(id).orElseThrow(() -> new RowNotFoundException("Exercise not found"));
         exercise.setName(exerciseInput.name());
         exercise.setDescription(exerciseInput.description());
         exercise.setLinkVideo(exerciseInput.videoLink());
         exercise.setRepetitions(exerciseInput.repetitions());
-        exercise.setTrainingType(trainingType);
+        exercise.setExerciseType(exerciseType);
+        exercise.setDuration(exerciseInput.duration());
         exerciseRepository.save(exercise);
     }
 

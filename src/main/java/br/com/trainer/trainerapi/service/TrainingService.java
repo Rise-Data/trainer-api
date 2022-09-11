@@ -65,8 +65,11 @@ public class TrainingService {
         if (trainingInput.member() == null)
             throw new NullPointerException("Member can't be null");
 
+        if (trainingInput.trainingStatus() == null)
+            throw new NullPointerException("TrainingStatus can't be null");
+
         var member = memberRepository.findById(trainingInput.member()).orElseThrow(() -> new RowNotFoundException("Member not found"));
-        var training = new Training(trainingInput.trainingDay(), member);
+        var training = new Training(trainingInput.trainingDay(), trainingInput.trainingStatus(), member);
         trainingRepository.save(training);
     }
 
@@ -77,8 +80,12 @@ public class TrainingService {
         if (trainingInput.trainingDay() == null)
             throw new NullPointerException("Training day can't be null");
 
+        if (trainingInput.trainingStatus() == null)
+            throw new NullPointerException("TrainingStatus can't be null");
+
         var training = trainingRepository.findById(id).orElseThrow(() -> new RowNotFoundException("Training not found"));
         training.setTrainingDay(trainingInput.trainingDay());
+        training.setTrainingStatus(trainingInput.trainingStatus());
         trainingRepository.save(training);
     }
 

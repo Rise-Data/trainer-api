@@ -14,7 +14,7 @@ public class Exercise {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exercise")
     private Integer Id;
 
-    @Column(name = "nr_repeticoes", length = 3)
+    @Column(name = "nr_repeticoes", length = 3, nullable = false)
     private Integer repetitions;
 
     @Column(name = "ds_exercicio", nullable = false)
@@ -25,6 +25,9 @@ public class Exercise {
 
     @Column(name = "nm_exercicio", length = 100, nullable = false)
     private String name;
+
+    @Column(name = "nr_duracao", length = 2)
+    private Integer duration;
 
     @ManyToOne
     @JoinColumn(name = "cd_treino")
@@ -45,8 +48,9 @@ public class Exercise {
         this.name = name;
     }
 
-    public Exercise(Integer repetitions, String description, String linkVideo, String name, Training training, ExerciseType exerciseType) {
+    public Exercise(Integer repetitions, Integer duration, String description, String linkVideo, String name, Training training, ExerciseType exerciseType) {
         this.repetitions = repetitions;
+        this.duration = duration;
         this.description = description;
         this.linkVideo = linkVideo;
         this.name = name;
@@ -94,19 +98,27 @@ public class Exercise {
         this.name = name;
     }
 
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public ExerciseType getExerciseType() {
+        return exerciseType;
+    }
+
+    public void setExerciseType(ExerciseType exerciseType) {
+        this.exerciseType = exerciseType;
+    }
+
     public Training getTraining() {
         return training;
     }
 
     public void setTraining(Training training) {
         this.training = training;
-    }
-
-    public ExerciseType getTrainingType() {
-        return exerciseType;
-    }
-
-    public void setTrainingType(ExerciseType exerciseType) {
-        this.exerciseType = exerciseType;
     }
 }

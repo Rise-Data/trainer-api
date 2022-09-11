@@ -13,7 +13,7 @@ public class Trainer {
     @Column(name = "cd_trainer")
     private Integer id;
 
-    @Column(name = "nm_usuario", length = 100)
+    @Column(name = "nm_usuario", length = 100, unique = true)
     private String user;
 
     @Column(name = "ds_senha", length = 8)

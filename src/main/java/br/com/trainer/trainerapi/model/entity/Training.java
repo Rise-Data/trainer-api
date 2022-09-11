@@ -15,8 +15,11 @@ public class Training {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "training")
     private Integer id;
 
-    @Column(name = "dia_treino", length = 2, nullable = false)
+    @Column(name = "dt_treino", length = 2, nullable = false)
     private LocalDate trainingDay;
+
+    @Column(name = "st_treino", nullable = false)
+    private Boolean trainingStatus;
 
     @ManyToOne
     @JoinColumn(name = "cd_aluno")
@@ -35,8 +38,9 @@ public class Training {
         this.trainingDay = trainingDay;
     }
 
-    public Training(LocalDate trainingDay, Member member) {
+    public Training(LocalDate trainingDay, Boolean trainingStatus, Member member) {
         this.trainingDay = trainingDay;
+        this.trainingStatus = trainingStatus;
         this.member = member;
     }
 
@@ -59,6 +63,14 @@ public class Training {
 
     public void setTrainingDay(LocalDate trainingDay) {
         this.trainingDay = trainingDay;
+    }
+
+    public Boolean getTrainingStatus() {
+        return trainingStatus;
+    }
+
+    public void setTrainingStatus(Boolean trainingStatus) {
+        this.trainingStatus = trainingStatus;
     }
 
     public Member getMember() {
