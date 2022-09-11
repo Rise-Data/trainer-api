@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "tb_treino")
-@SequenceGenerator(name = "training", sequenceName = "sq_training", allocationSize = 1)
+@Table(name = "t_rdt_treino")
+@SequenceGenerator(name = "training", sequenceName = "sq_rdt_training", allocationSize = 1)
 public class Training {
 
     @Id

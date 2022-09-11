@@ -3,9 +3,9 @@ package br.com.trainer.trainerapi.model.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tb_tipo_exercicio")
-@SequenceGenerator(name = "tipo_exercicio", sequenceName = "sq_member", allocationSize = 1)
-public class TrainingType {
+@Table(name = "t_rdt_tipo_exercicio")
+@SequenceGenerator(name = "tipo_exercicio", sequenceName = "sq_rdt_member", allocationSize = 1)
+public class ExerciseType {
 
     @Id
     @Column(name = "cd_tipo_exercicio")
@@ -15,18 +15,18 @@ public class TrainingType {
     @Column(name = "nm_tipo_exercicio", length = 2, nullable = false)
     private String name;
 
-    @OneToOne(mappedBy = "trainingType", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "exerciseType", cascade = CascadeType.ALL)
     private Exercise exercise;
 
-    public TrainingType() {
+    public ExerciseType() {
     }
 
-    public TrainingType(Integer id, String name) {
+    public ExerciseType(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public TrainingType(String name) {
+    public ExerciseType(String name) {
         this.name = name;
     }
 

@@ -4,8 +4,8 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(name = "tb_exercicio")
-@SequenceGenerator(name = "exercise", sequenceName = "sq_exercise", allocationSize = 1)
+@Table(name = "t_rdt_exercicio")
+@SequenceGenerator(name = "exercise", sequenceName = "sq_rdt_exercise", allocationSize = 1)
 
 public class Exercise {
 
@@ -32,7 +32,7 @@ public class Exercise {
 
     @OneToOne
     @JoinColumn(name = "cd_tipo_exercicio")
-    private TrainingType trainingType;
+    private ExerciseType exerciseType;
 
     public Exercise() {
     }
@@ -45,13 +45,13 @@ public class Exercise {
         this.name = name;
     }
 
-    public Exercise(Integer repetitions, String description, String linkVideo, String name, Training training, TrainingType trainingType) {
+    public Exercise(Integer repetitions, String description, String linkVideo, String name, Training training, ExerciseType exerciseType) {
         this.repetitions = repetitions;
         this.description = description;
         this.linkVideo = linkVideo;
         this.name = name;
         this.training = training;
-        this.trainingType = trainingType;
+        this.exerciseType = exerciseType;
     }
 
     public Integer getId() {
@@ -102,11 +102,11 @@ public class Exercise {
         this.training = training;
     }
 
-    public TrainingType getTrainingType() {
-        return trainingType;
+    public ExerciseType getTrainingType() {
+        return exerciseType;
     }
 
-    public void setTrainingType(TrainingType trainingType) {
-        this.trainingType = trainingType;
+    public void setTrainingType(ExerciseType exerciseType) {
+        this.exerciseType = exerciseType;
     }
 }

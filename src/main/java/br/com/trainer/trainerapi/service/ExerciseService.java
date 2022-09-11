@@ -7,7 +7,7 @@ import br.com.trainer.trainerapi.model.dto.exercise.ExerciseUpdateInputDto;
 import br.com.trainer.trainerapi.model.entity.Exercise;
 import br.com.trainer.trainerapi.model.repository.ExerciseRepository;
 import br.com.trainer.trainerapi.model.repository.TrainingRepository;
-import br.com.trainer.trainerapi.model.repository.TrainingTypeRepository;
+import br.com.trainer.trainerapi.model.repository.ExerciseTypeRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -16,12 +16,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class ExerciseService {
     private final ExerciseRepository exerciseRepository;
-    private final TrainingTypeRepository trainingTypeRepository;
+    private final ExerciseTypeRepository exerciseTypeRepository;
     private final TrainingRepository trainingRepository;
 
-    public ExerciseService(ExerciseRepository exerciseRepository, TrainingTypeRepository trainingTypeRepository, TrainingRepository trainingRepository) {
+    public ExerciseService(ExerciseRepository exerciseRepository, ExerciseTypeRepository exerciseTypeRepository, TrainingRepository trainingRepository) {
         this.exerciseRepository = exerciseRepository;
-        this.trainingTypeRepository = trainingTypeRepository;
+        this.exerciseTypeRepository = exerciseTypeRepository;
         this.trainingRepository = trainingRepository;
     }
 
@@ -57,7 +57,7 @@ public class ExerciseService {
         if (exerciseInput.repetitions() == null)
             throw new NullPointerException("Repetitions can't be null");
 
-        var trainingType = trainingTypeRepository.findById(exerciseInput.trainingTypeId()).orElseThrow(() -> new RowNotFoundException("TrainingType not found"));
+        var trainingType = exerciseTypeRepository.findById(exerciseInput.trainingTypeId()).orElseThrow(() -> new RowNotFoundException("ExerciseType not found"));
         var training = trainingRepository.findById(exerciseInput.training()).orElseThrow(() -> new RowNotFoundException("Training not found"));
         var exercise = new Exercise(
                 exerciseInput.repetitions(),
@@ -88,7 +88,7 @@ public class ExerciseService {
         if (exerciseInput.trainingType() == null)
             throw new NullPointerException("trainingTypeId can't be null");
 
-        var trainingType = trainingTypeRepository.findById(exerciseInput.trainingType()).orElseThrow(() -> new RowNotFoundException("TrainingType not found"));
+        var trainingType = exerciseTypeRepository.findById(exerciseInput.trainingType()).orElseThrow(() -> new RowNotFoundException("ExerciseType not found"));
         var exercise = exerciseRepository.findById(id).orElseThrow(() -> new RowNotFoundException("Exercise not found"));
         exercise.setName(exerciseInput.name());
         exercise.setDescription(exerciseInput.description());

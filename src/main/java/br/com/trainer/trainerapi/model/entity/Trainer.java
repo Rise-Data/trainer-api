@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "tb_trainer")
-@SequenceGenerator(name = "trainer", sequenceName = "sq_trainer", allocationSize = 1)
+@Table(name = "t_rdt_trainer")
+@SequenceGenerator(name = "trainer", sequenceName = "sq_rdt_trainer", allocationSize = 1)
 public class Trainer {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "trainer")

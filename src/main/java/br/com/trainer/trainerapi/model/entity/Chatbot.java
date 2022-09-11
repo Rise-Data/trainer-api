@@ -3,8 +3,8 @@ package br.com.trainer.trainerapi.model.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tb_chatbot")
-@SequenceGenerator(name = "chatbot", sequenceName = "sq_chatbot", allocationSize = 1)
+@Table(name = "t_rdt_chatbot")
+@SequenceGenerator(name = "chatbot", sequenceName = "sq_rdt_chatbot", allocationSize = 1)
 public class Chatbot {
 
     @Id
