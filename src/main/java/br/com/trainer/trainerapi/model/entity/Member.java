@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "tb_aluno")
-@SequenceGenerator(name = "member", sequenceName = "sq_member", allocationSize = 1)
+@Table(name = "t_rdt_aluno")
+@SequenceGenerator(name = "member", sequenceName = "sq_rdt_member", allocationSize = 1)
 public class Member {
 
     @Id
@@ -33,27 +33,27 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Training> trainings;
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TrainerClass> trainerClasses;
+
     public Member() {
         this.active = false;
         this.trainings = new ArrayList<>();
+        this.trainerClasses = new ArrayList<>();
         this.trainingSequence = 0;
     }
 
     public Member(Integer id, String name, String phone) {
+        this();
         this.id = id;
         this.name = name;
         this.phone = phone;
-        this.active = false;
-        this.trainings = new ArrayList<>();
-        this.trainingSequence = 0;
     }
     public Member(String name, String phone, Trainer trainer) {
+        this();
         this.name = name;
         this.phone = phone;
         this.trainer = trainer;
-        this.active = false;
-        this.trainings = new ArrayList<>();
-        this.trainingSequence = 0;
     }
 
     public void addTraining(Training training) {
@@ -115,5 +115,13 @@ public class Member {
 
     public void setTrainings(List<Training> trainings) {
         this.trainings = trainings;
+    }
+
+    public List<TrainerClass> getTrainerClasses() {
+        return trainerClasses;
+    }
+
+    public void setTrainerClasses(List<TrainerClass> trainerClasses) {
+        this.trainerClasses = trainerClasses;
     }
 }

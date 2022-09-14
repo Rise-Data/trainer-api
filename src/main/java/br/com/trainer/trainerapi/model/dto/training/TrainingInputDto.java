@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 public record TrainingInputDto(
         LocalDate trainingDay,
+        Boolean trainingStatus,
         Integer member
 ) {
 }

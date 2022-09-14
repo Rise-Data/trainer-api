@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "tb_treino")
-@SequenceGenerator(name = "training", sequenceName = "sq_training", allocationSize = 1)
+@Table(name = "t_rdt_treino")
+@SequenceGenerator(name = "training", sequenceName = "sq_rdt_training", allocationSize = 1)
 public class Training {
 
     @Id
@@ -15,8 +15,11 @@ public class Training {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "training")
     private Integer id;
 
-    @Column(name = "dia_treino", length = 2, nullable = false)
+    @Column(name = "dt_treino", length = 2, nullable = false)
     private LocalDate trainingDay;
+
+    @Column(name = "st_treino", nullable = false)
+    private Boolean trainingStatus;
 
     @ManyToOne
     @JoinColumn(name = "cd_aluno")
@@ -26,17 +29,20 @@ public class Training {
     private List<Exercise> exercises;
 
     public Training() {
+        this.trainingStatus = false;
         this.exercises = new ArrayList<>();
     }
 
     public Training(Integer id, LocalDate trainingDay) {
-        this.exercises = new ArrayList<>();
+        this();
         this.id = id;
         this.trainingDay = trainingDay;
     }
 
-    public Training(LocalDate trainingDay, Member member) {
+    public Training(LocalDate trainingDay, Boolean trainingStatus, Member member) {
+        this();
         this.trainingDay = trainingDay;
+        this.trainingStatus = trainingStatus;
         this.member = member;
     }
 
@@ -59,6 +65,14 @@ public class Training {
 
     public void setTrainingDay(LocalDate trainingDay) {
         this.trainingDay = trainingDay;
+    }
+
+    public Boolean getTrainingStatus() {
+        return trainingStatus;
+    }
+
+    public void setTrainingStatus(Boolean trainingStatus) {
+        this.trainingStatus = trainingStatus;
     }
 
     public Member getMember() {

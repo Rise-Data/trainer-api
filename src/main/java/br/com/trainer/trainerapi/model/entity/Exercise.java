@@ -4,8 +4,8 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(name = "tb_exercicio")
-@SequenceGenerator(name = "exercise", sequenceName = "sq_exercise", allocationSize = 1)
+@Table(name = "t_rdt_exercicio")
+@SequenceGenerator(name = "exercise", sequenceName = "sq_rdt_exercise", allocationSize = 1)
 
 public class Exercise {
 
@@ -14,7 +14,7 @@ public class Exercise {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exercise")
     private Integer Id;
 
-    @Column(name = "nr_repeticoes", length = 3)
+    @Column(name = "nr_repeticoes", length = 3, nullable = false)
     private Integer repetitions;
 
     @Column(name = "ds_exercicio", nullable = false)
@@ -26,13 +26,16 @@ public class Exercise {
     @Column(name = "nm_exercicio", length = 100, nullable = false)
     private String name;
 
+    @Column(name = "nr_duracao", length = 2)
+    private Integer duration;
+
     @ManyToOne
     @JoinColumn(name = "cd_treino")
     private Training training;
 
-    @OneToOne
-    @JoinColumn(name = "cd_tipo_exercicio")
-    private TrainingType trainingType;
+    @ManyToOne
+    @JoinColumn(name = "cd_exerciseType", nullable = false)
+    private ExerciseType exerciseType;
 
     public Exercise() {
     }
@@ -45,13 +48,14 @@ public class Exercise {
         this.name = name;
     }
 
-    public Exercise(Integer repetitions, String description, String linkVideo, String name, Training training, TrainingType trainingType) {
+    public Exercise(Integer repetitions, Integer duration, String description, String linkVideo, String name, Training training, ExerciseType exerciseType) {
         this.repetitions = repetitions;
+        this.duration = duration;
         this.description = description;
         this.linkVideo = linkVideo;
         this.name = name;
         this.training = training;
-        this.trainingType = trainingType;
+        this.exerciseType = exerciseType;
     }
 
     public Integer getId() {
@@ -94,19 +98,27 @@ public class Exercise {
         this.name = name;
     }
 
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public ExerciseType getExerciseType() {
+        return exerciseType;
+    }
+
+    public void setExerciseType(ExerciseType exerciseType) {
+        this.exerciseType = exerciseType;
+    }
+
     public Training getTraining() {
         return training;
     }
 
     public void setTraining(Training training) {
         this.training = training;
-    }
-
-    public TrainingType getTrainingType() {
-        return trainingType;
-    }
-
-    public void setTrainingType(TrainingType trainingType) {
-        this.trainingType = trainingType;
     }
 }
