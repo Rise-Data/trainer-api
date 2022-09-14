@@ -1,10 +1,10 @@
-package br.com.trainer.trainerapi.entity;
+package br.com.trainer.trainerapi.model.entity;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tb_chatbot")
-@SequenceGenerator(name = "chatbot", sequenceName = "sq_chatbot", allocationSize = 1)
+@Table(name = "t_rdt_chatbot")
+@SequenceGenerator(name = "chatbot", sequenceName = "sq_rdt_chatbot", allocationSize = 1)
 public class Chatbot {
 
     @Id
@@ -15,6 +15,10 @@ public class Chatbot {
     @Column(name = "nm_chatbot", length = 100, nullable = false)
     private String name;
 
+    @OneToOne
+    @JoinColumn(name = "cd_trainer")
+    private Trainer trainer;
+
     public Chatbot() {
 
     }
@@ -22,6 +26,11 @@ public class Chatbot {
     public Chatbot(Integer id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public Chatbot(String name, Trainer trainer) {
+        this.name = name;
+        this.trainer = trainer;
     }
 
     public Integer getId() {
@@ -38,6 +47,14 @@ public class Chatbot {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Trainer getTrainer() {
+        return trainer;
+    }
+
+    public void setTrainer(Trainer trainer) {
+        this.trainer = trainer;
     }
 
     @Override
