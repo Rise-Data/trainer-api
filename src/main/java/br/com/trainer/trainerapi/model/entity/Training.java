@@ -29,16 +29,18 @@ public class Training {
     private List<Exercise> exercises;
 
     public Training() {
+        this.trainingStatus = false;
         this.exercises = new ArrayList<>();
     }
 
     public Training(Integer id, LocalDate trainingDay) {
-        this.exercises = new ArrayList<>();
+        this();
         this.id = id;
         this.trainingDay = trainingDay;
     }
 
     public Training(LocalDate trainingDay, Boolean trainingStatus, Member member) {
+        this();
         this.trainingDay = trainingDay;
         this.trainingStatus = trainingStatus;
         this.member = member;

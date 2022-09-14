@@ -31,6 +31,28 @@ public class ExerciseController {
         }
     }
 
+    @GetMapping("/exerciseType/{exerciseTypeId}")
+    public ResponseEntity<RequestResultDto> getByExerciseType(@PageableDefault Pageable pageable, @PathVariable Integer exerciseTypeId) {
+        try {
+            Page<ExerciseResultDto> resultDto = exerciseService.listByExerciseType(pageable, exerciseTypeId);
+            return ResponseEntity.status(HttpStatus.OK).body(new RequestResultDto(resultDto, false, null));
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RequestResultDto(null, true, ex.getMessage()));
+        }
+    }
+
+    @GetMapping("/training/{trainingId}")
+    public ResponseEntity<RequestResultDto> getByTraining(@PageableDefault Pageable pageable, @PathVariable Integer trainingId) {
+        try {
+            Page<ExerciseResultDto> resultDto = exerciseService.listByTraining(pageable, trainingId);
+            return ResponseEntity.status(HttpStatus.OK).body(new RequestResultDto(resultDto, false, null));
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RequestResultDto(null, true, ex.getMessage()));
+        }
+    }
+
     @PostMapping
     public ResponseEntity<RequestResultDto> createExercise(@RequestBody ExerciseInputDto exercise) {
         try {

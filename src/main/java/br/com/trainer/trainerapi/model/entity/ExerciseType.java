@@ -1,6 +1,7 @@
 package br.com.trainer.trainerapi.model.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "t_rdt_tipo_exercicio")
@@ -12,11 +13,11 @@ public class ExerciseType {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tipo_exercicio")
     private Integer id;
 
-    @Column(name = "nm_tipo_exercicio", length = 2, nullable = false)
+    @Column(name = "nm_tipo_exercicio", length = 100, nullable = false)
     private String name;
 
-    @OneToOne(mappedBy = "exerciseType", cascade = CascadeType.ALL)
-    private Exercise exercise;
+    @OneToMany(mappedBy = "exerciseType", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Exercise> exercises;
 
     public ExerciseType() {
     }
@@ -46,11 +47,11 @@ public class ExerciseType {
         this.name = name;
     }
 
-    public Exercise getExercise() {
-        return exercise;
+    public List<Exercise> getExercises() {
+        return exercises;
     }
 
-    public void setExercise(Exercise exercise) {
-        this.exercise = exercise;
+    public void setExercises(List<Exercise> exercises) {
+        this.exercises = exercises;
     }
 }

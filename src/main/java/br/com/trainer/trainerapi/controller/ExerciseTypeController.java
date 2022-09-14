@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/trainingType")
+@RequestMapping("/api/exerciseType")
 public class ExerciseTypeController {
     private final ExerciseTypeService exerciseTypeService;
 
@@ -62,7 +62,7 @@ public class ExerciseTypeController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<RequestResultDto> deleteTrainingType(Integer id) {
+    public ResponseEntity<RequestResultDto> deleteTrainingType(@PathVariable Integer id) {
         try {
             exerciseTypeService.deleteTrainingType(id);
             return ResponseEntity.status(HttpStatus.OK).body(new RequestResultDto(null, false, null));

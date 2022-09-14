@@ -7,6 +7,6 @@ public record ExerciseInputDto(
         String  videoLink,
         String  description,
         Integer training,
-        Integer trainingTypeId) {
+        Integer exerciseType) {
 
 }

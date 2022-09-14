@@ -5,7 +5,7 @@ public record ExerciseResultDto(
         String  name,
         Integer repetitions,
         Integer idTraining,
-        Integer idTrainingType,
+        Integer exerciseType,
         String description,
         String  linkVideo
 

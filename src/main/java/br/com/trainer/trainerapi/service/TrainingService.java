@@ -4,6 +4,7 @@ import br.com.trainer.trainerapi.exception.RowNotFoundException;
 import br.com.trainer.trainerapi.model.dto.training.TrainingInputDto;
 import br.com.trainer.trainerapi.model.dto.training.TrainingResultDto;
 import br.com.trainer.trainerapi.model.dto.training.TrainingUpdateInputDto;
+import br.com.trainer.trainerapi.model.entity.Exercise;
 import br.com.trainer.trainerapi.model.entity.Training;
 import br.com.trainer.trainerapi.model.repository.MemberRepository;
 import br.com.trainer.trainerapi.model.repository.TrainingRepository;
@@ -30,7 +31,11 @@ public class TrainingService {
                         .map(t -> new TrainingResultDto(
                                 t.getId(),
                                 t.getTrainingDay(),
-                                t.getMember().getId()
+                                t.getMember().getId(),
+                                t.getExercises()
+                                        .stream()
+                                        .map(Exercise::getId)
+                                        .toList()
                         ))
                         .toList()
         );
@@ -38,7 +43,14 @@ public class TrainingService {
 
     public TrainingResultDto listTraining(Integer id) throws RowNotFoundException {
         var training = trainingRepository.findById(id).orElseThrow(() -> new RowNotFoundException("Training not found"));
-        return new TrainingResultDto(training.getId(), training.getTrainingDay(), training.getMember().getId());
+        return new TrainingResultDto(
+                training.getId(),
+                training.getTrainingDay(),
+                training.getMember().getId(),
+                training.getExercises()
+                        .stream()
+                        .map(Exercise::getId)
+                        .toList());
     }
 
     public Page<TrainingResultDto> listTrainingsByMember(Pageable pageable, Integer memberId) throws RowNotFoundException {
@@ -49,7 +61,11 @@ public class TrainingService {
                         .map(t -> new TrainingResultDto(
                                 t.getId(),
                                 t.getTrainingDay(),
-                                t.getMember().getId()
+                                t.getMember().getId(),
+                                t.getExercises()
+                                        .stream()
+                                        .map(Exercise::getId)
+                                        .toList()
                         ))
                         .toList()
         );

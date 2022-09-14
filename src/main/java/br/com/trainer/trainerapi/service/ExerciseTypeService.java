@@ -24,15 +24,14 @@ public class ExerciseTypeService {
                         .stream()
                         .map(t -> new ExerciseTypeResultDto(
                                 t.getId(),
-                                t.getName(),
-                                t.getExercise().getId()
+                                t.getName()
                         )).toList()
         );
     }
 
     public ExerciseTypeResultDto listTrainingType(Integer id) throws RowNotFoundException {
-        var trainingType = exerciseTypeRepository.findById(id).orElseThrow(() -> new RowNotFoundException("ExerciseType not found+"));
-        return new ExerciseTypeResultDto(trainingType.getId(), trainingType.getName(), trainingType.getExercise().getId());
+        var exerciseType = exerciseTypeRepository.findById(id).orElseThrow(() -> new RowNotFoundException("exerciseType not found+"));
+        return new ExerciseTypeResultDto(exerciseType.getId(), exerciseType.getName());
     }
 
     public void addTrainingType(ExerciseTypeInput exerciseTypeInput) {
@@ -42,8 +41,8 @@ public class ExerciseTypeService {
         if (exerciseTypeInput.name() == null || exerciseTypeInput.name().isEmpty())
             throw new NullPointerException("Name can't be null or empty");
 
-        var trainingType = new ExerciseType(exerciseTypeInput.name());
-        exerciseTypeRepository.save(trainingType);
+        var exerciseType = new ExerciseType(exerciseTypeInput.name());
+        exerciseTypeRepository.save(exerciseType);
     }
 
     public void updateTrainingType(ExerciseTypeInput exerciseTypeInput, Integer id) throws RowNotFoundException {
@@ -54,13 +53,13 @@ public class ExerciseTypeService {
         if (exerciseTypeInput.name() == null || exerciseTypeInput.name().isEmpty())
             throw new NullPointerException("Name can't be null or empty");
 
-        var trainingType = exerciseTypeRepository.findById(id).orElseThrow(() -> new RowNotFoundException("ExerciseType not found"));
-        trainingType.setName(exerciseTypeInput.name());
-        exerciseTypeRepository.save(trainingType);
+        var exerciseType = exerciseTypeRepository.findById(id).orElseThrow(() -> new RowNotFoundException("exerciseType not found"));
+        exerciseType.setName(exerciseTypeInput.name());
+        exerciseTypeRepository.save(exerciseType);
     }
 
     public void deleteTrainingType(Integer id) throws RowNotFoundException {
-        var trainingType = exerciseTypeRepository.findById(id).orElseThrow(() -> new RowNotFoundException("ExerciseType not found"));
-        exerciseTypeRepository.delete(trainingType);
+        var exerciseType = exerciseTypeRepository.findById(id).orElseThrow(() -> new RowNotFoundException("exerciseType not found"));
+        exerciseTypeRepository.delete(exerciseType);
     }
 }

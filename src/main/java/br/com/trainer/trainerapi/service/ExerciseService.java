@@ -38,12 +38,40 @@ public class ExerciseService {
                         m.getLinkVideo())).toList());
     }
 
+    public Page<ExerciseResultDto> listByTraining(Pageable pageable, Integer trainingId) throws RowNotFoundException {
+        var training = trainingRepository.findById(trainingId).orElseThrow(() -> new RowNotFoundException("Training not found"));
+        return new PageImpl<ExerciseResultDto>(exerciseRepository.findByTraining(training)
+                .stream()
+                .map(e -> new ExerciseResultDto(
+                        e.getId(),
+                        e.getName(),
+                        e.getRepetitions(),
+                        e.getTraining().getId(),
+                        e.getExerciseType().getId(),
+                        e.getDescription(),
+                        e.getLinkVideo())).toList());
+    }
+
+    public Page<ExerciseResultDto> listByExerciseType(Pageable pageable, Integer exerciseTypeId) throws RowNotFoundException {
+        var exerciseType = exerciseTypeRepository.findById(exerciseTypeId).orElseThrow(() -> new RowNotFoundException("ExerciseType not found"));
+        return new PageImpl<ExerciseResultDto>(exerciseRepository.findByExerciseType(exerciseType)
+                .stream()
+                .map(e -> new ExerciseResultDto(
+                        e.getId(),
+                        e.getName(),
+                        e.getRepetitions(),
+                        e.getTraining().getId(),
+                        e.getExerciseType().getId(),
+                        e.getDescription(),
+                        e.getLinkVideo())).toList());
+    }
+
     public void addExercise(ExerciseInputDto exerciseInput) throws RowNotFoundException {
         if (exerciseInput == null)
             throw new NullPointerException("exercise can't be null");
 
-        if (exerciseInput.trainingTypeId() == null)
-            throw new NullPointerException("trainingTypeId can't be null");
+        if (exerciseInput.exerciseType() == null)
+            throw new NullPointerException("exerciseType can't be null");
 
         if (exerciseInput.name() == null)
             throw new NullPointerException("Name can't be null");
@@ -57,7 +85,7 @@ public class ExerciseService {
         if (exerciseInput.repetitions() == null)
             throw new NullPointerException("Repetitions can't be null");
 
-        var trainingType = exerciseTypeRepository.findById(exerciseInput.trainingTypeId()).orElseThrow(() -> new RowNotFoundException("ExerciseType not found"));
+        var trainingType = exerciseTypeRepository.findById(exerciseInput.exerciseType()).orElseThrow(() -> new RowNotFoundException("exerciseType not found"));
         var training = trainingRepository.findById(exerciseInput.training()).orElseThrow(() -> new RowNotFoundException("Training not found"));
         var exercise = new Exercise(
                 exerciseInput.repetitions(),
@@ -86,10 +114,10 @@ public class ExerciseService {
         if (exerciseInput.description() == null)
             throw new NullPointerException("description can't be null");
 
-        if (exerciseInput.trainingType() == null)
-            throw new NullPointerException("trainingTypeId can't be null");
+        if (exerciseInput.exerciseType() == null)
+            throw new NullPointerException("exerciseType can't be null");
 
-        var exerciseType = exerciseTypeRepository.findById(exerciseInput.trainingType()).orElseThrow(() -> new RowNotFoundException("ExerciseType not found"));
+        var exerciseType = exerciseTypeRepository.findById(exerciseInput.exerciseType()).orElseThrow(() -> new RowNotFoundException("exerciseType not found"));
         var exercise = exerciseRepository.findById(id).orElseThrow(() -> new RowNotFoundException("Exercise not found"));
         exercise.setName(exerciseInput.name());
         exercise.setDescription(exerciseInput.description());

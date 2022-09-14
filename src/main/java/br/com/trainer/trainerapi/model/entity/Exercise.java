@@ -33,8 +33,8 @@ public class Exercise {
     @JoinColumn(name = "cd_treino")
     private Training training;
 
-    @OneToOne
-    @JoinColumn(name = "cd_tipo_exercicio")
+    @ManyToOne
+    @JoinColumn(name = "cd_exerciseType", nullable = false)
     private ExerciseType exerciseType;
 
     public Exercise() {
