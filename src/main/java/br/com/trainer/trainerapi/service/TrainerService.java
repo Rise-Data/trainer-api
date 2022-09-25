@@ -1,5 +1,6 @@
 package br.com.trainer.trainerapi.service;
 
+import br.com.trainer.trainerapi.exception.NotAuthorizedException;
 import br.com.trainer.trainerapi.exception.RowNotFoundException;
 import br.com.trainer.trainerapi.model.dto.trainer.TrainerInputDto;
 import br.com.trainer.trainerapi.model.dto.trainer.TrainerResultDto;
@@ -20,6 +21,21 @@ public class TrainerService {
         this.trainerRepository = trainerRepository;
     }
 
+    public TrainerResultDto login(String email, String password) throws RowNotFoundException, NotAuthorizedException {
+        var trainer = trainerRepository.findByEmail(email).orElseThrow(() -> new RowNotFoundException("Trainer not found"));
+        if (!trainer.getPassword().equals(password))
+            throw new NotAuthorizedException("Password incorrect");
+        return new TrainerResultDto(
+                trainer.getId(),
+                trainer.getUser(),
+                trainer.getEmail(),
+                trainer.getPhone(),
+                trainer.getMembers()
+                        .stream()
+                        .map(Member::getId)
+                        .toList());
+    }
+
     public void registerTrainer(TrainerInputDto trainer) {
         validateTrainerInput(trainer);
         var trainerEntity = new Trainer(trainer.user(), trainer.password(), trainer.email(), trainer.cpf(), trainer.phone());
@@ -38,7 +54,7 @@ public class TrainerService {
                 )).toList());
     }
 
-    public void updateTrainer(TrainerUpdatableInputDto trainer, Integer id) throws RowNotFoundException {
+    public TrainerResultDto updateTrainer(TrainerUpdatableInputDto trainer, Integer id) throws RowNotFoundException {
         if (trainer == null)
             throw new NullPointerException("Trainer can't be null");
 
@@ -52,7 +68,17 @@ public class TrainerService {
         trainerEntity.setUser(trainer.user());
         trainerEntity.setEmail(trainer.email());
         trainerEntity.setPhone(trainer.phone());
+        trainerEntity.setPassword(trainer.password());
         trainerRepository.save(trainerEntity);
+
+        return new TrainerResultDto(
+                trainerEntity.getId(),
+                trainerEntity.getUser(),
+                trainerEntity.getEmail(),
+                trainerEntity.getPhone(),
+                trainerEntity.getMembers()
+                        .stream()
+                        .map(Member::getId).toList());
     }
 
     public TrainerResultDto listTrainer(Integer id) throws RowNotFoundException {
@@ -90,5 +116,8 @@ public class TrainerService {
 
         if (trainer.cpf() == null)
             throw new NullPointerException("CPF can't be null");
+
+        if (trainer.password().length() > 8)
+            throw new IllegalArgumentException("The maximum number of characters in the password is 8");
     }
 }

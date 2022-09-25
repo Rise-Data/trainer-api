@@ -1,6 +1,7 @@
 package br.com.trainer.trainerapi.controller;
 
 import br.com.trainer.trainerapi.model.dto.RequestResultDto;
+import br.com.trainer.trainerapi.model.dto.trainer.LoginDto;
 import br.com.trainer.trainerapi.model.dto.trainer.TrainerInputDto;
 import br.com.trainer.trainerapi.model.dto.trainer.TrainerUpdatableInputDto;
 import br.com.trainer.trainerapi.service.TrainerService;
@@ -35,6 +36,16 @@ public class TrainerController {
         }
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<RequestResultDto> login(@RequestBody LoginDto credentials) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(new RequestResultDto(trainerService.login(credentials.email(), credentials.password()), false, null));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RequestResultDto(null, true, ex.getMessage()));
+        }
+    }
+
     @PostMapping
     public ResponseEntity<RequestResultDto> createTrainer(@RequestBody TrainerInputDto trainer) {
         try {
@@ -49,8 +60,8 @@ public class TrainerController {
     @PutMapping("{id}")
     public ResponseEntity<RequestResultDto> updateTrainer(@RequestBody TrainerUpdatableInputDto trainer, @PathVariable Integer id) {
         try {
-            trainerService.updateTrainer(trainer, id);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new RequestResultDto(null, false, null));
+            var result = trainerService.updateTrainer(trainer, id);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new RequestResultDto(result, false, null));
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RequestResultDto(null, true, ex.getMessage()));
