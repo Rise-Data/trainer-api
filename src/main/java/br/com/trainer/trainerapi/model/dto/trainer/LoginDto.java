@@ -1,9 +1,7 @@
 package br.com.trainer.trainerapi.model.dto.trainer;
 
-public record TrainerUpdatableInputDto(
-        String user,
+public record LoginDto(
         String email,
-        String phone,
         String password
 ) {
 }
