@@ -7,21 +7,28 @@ import br.com.trainer.trainerapi.model.dto.training.TrainingUpdateInputDto;
 import br.com.trainer.trainerapi.model.entity.Exercise;
 import br.com.trainer.trainerapi.model.entity.Training;
 import br.com.trainer.trainerapi.model.repository.MemberRepository;
+import br.com.trainer.trainerapi.model.repository.TrainerRepository;
 import br.com.trainer.trainerapi.model.repository.TrainingRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 public class TrainingService {
 
     private final TrainingRepository trainingRepository;
     private final MemberRepository memberRepository;
+    private final TrainerRepository trainerRepository;
 
-    public TrainingService(TrainingRepository trainingRepository, MemberRepository memberRepository) {
+    public TrainingService(TrainingRepository trainingRepository,
+                           MemberRepository memberRepository,
+                           TrainerRepository trainerRepository) {
         this.trainingRepository = trainingRepository;
         this.memberRepository = memberRepository;
+        this.trainerRepository = trainerRepository;
     }
 
     public Page<TrainingResultDto> listAllTrainings(Pageable pageable) {
@@ -56,7 +63,7 @@ public class TrainingService {
     public Page<TrainingResultDto> listTrainingsByMember(Pageable pageable, Integer memberId) throws RowNotFoundException {
         var member = memberRepository.findById(memberId).orElseThrow(() -> new RowNotFoundException("Member not found"));
         return new PageImpl<TrainingResultDto>(
-                trainingRepository.findByMember(pageable, member)
+                trainingRepository.findByMember(member)
                         .stream()
                         .map(t -> new TrainingResultDto(
                                 t.getId(),
@@ -69,6 +76,22 @@ public class TrainingService {
                         ))
                         .toList()
         );
+    }
+
+    public Page<TrainingResultDto> listTrainingsByTrainer(Pageable pageable, Integer trainerId) throws RowNotFoundException {
+        var trainer = trainerRepository.findById(trainerId).orElseThrow(() -> new RowNotFoundException("Trainer not found"));
+        var membersOfTrainer = memberRepository.findByTrainer(trainer);
+        var trainings = new ArrayList<TrainingResultDto>();
+        membersOfTrainer.forEach(member ->
+                trainings.addAll(trainingRepository.findByMember(member)
+                        .stream()
+                        .map(t -> new TrainingResultDto(
+                                t.getId(),
+                                t.getTrainingDay(),
+                                t.getMember().getId(),
+                                t.getExercises().stream().map(Exercise::getId).toList()))   .toList()));
+
+        return new PageImpl<TrainingResultDto>(trainings);
     }
 
     public void addTraining(TrainingInputDto trainingInput) throws RowNotFoundException {

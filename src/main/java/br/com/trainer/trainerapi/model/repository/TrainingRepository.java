@@ -6,7 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 
 public interface TrainingRepository extends JpaRepository<Training, Integer> {
-    Page<Training> findByMember(Pageable pageable, Member member);
+    List<Training> findByMember(Member member);
 }
