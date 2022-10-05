@@ -9,6 +9,6 @@ import java.util.List;
 
 
 public interface MemberRepository extends JpaRepository<Member, Integer> {
-    List<Member> findByTrainer(Trainer trainer, Pageable pageable);
+    List<Member> findByTrainer(Trainer trainer);
 
 }

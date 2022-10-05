@@ -10,5 +10,8 @@ public record TrainerResultDto(
         String user,
         String email,
         String phone,
-        List<Integer> membersIds) {
+        List<Integer> membersIds,
+        List<Integer> trainingsIds,
+        List<Integer> classesIds
+) {
 }

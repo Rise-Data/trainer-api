@@ -7,18 +7,27 @@ import br.com.trainer.trainerapi.model.dto.trainer.TrainerResultDto;
 import br.com.trainer.trainerapi.model.dto.trainer.TrainerUpdatableInputDto;
 import br.com.trainer.trainerapi.model.entity.Member;
 import br.com.trainer.trainerapi.model.entity.Trainer;
+import br.com.trainer.trainerapi.model.entity.TrainerClass;
+import br.com.trainer.trainerapi.model.entity.Training;
+import br.com.trainer.trainerapi.model.repository.TrainerClassRepository;
 import br.com.trainer.trainerapi.model.repository.TrainerRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 @Service
 public class TrainerService {
     private final TrainerRepository trainerRepository;
+    private final TrainerClassRepository trainerClassRepository;
 
-    public TrainerService(TrainerRepository trainerRepository) {
+    public TrainerService(TrainerRepository trainerRepository, TrainerClassRepository trainerClassRepository) {
         this.trainerRepository = trainerRepository;
+        this.trainerClassRepository = trainerClassRepository;
     }
 
     public TrainerResultDto login(String email, String password) throws RowNotFoundException, NotAuthorizedException {
@@ -33,7 +42,10 @@ public class TrainerService {
                 trainer.getMembers()
                         .stream()
                         .map(Member::getId)
-                        .toList());
+                        .toList(),
+                getAllTrainings(trainer),
+                getAllClasses(trainer)
+                );
     }
 
     public void registerTrainer(TrainerInputDto trainer) {
@@ -50,7 +62,9 @@ public class TrainerService {
                         t.getUser(),
                         t.getEmail(),
                         t.getPhone(),
-                        t.getMembers().stream().map(Member::getId).toList()
+                        t.getMembers().stream().map(Member::getId).toList(),
+                        getAllTrainings(t),
+                        getAllClasses(t)
                 )).toList());
     }
 
@@ -78,7 +92,10 @@ public class TrainerService {
                 trainerEntity.getPhone(),
                 trainerEntity.getMembers()
                         .stream()
-                        .map(Member::getId).toList());
+                        .map(Member::getId).toList(),
+                getAllTrainings(trainerEntity),
+                getAllClasses(trainerEntity)
+        );
     }
 
     public TrainerResultDto listTrainer(Integer id) throws RowNotFoundException {
@@ -89,7 +106,9 @@ public class TrainerService {
                     trainerEntity.getUser(),
                     trainerEntity.getEmail(),
                     trainerEntity.getPhone(),
-                    trainerEntity.getMembers().stream().map(Member::getId).toList()
+                    trainerEntity.getMembers().stream().map(Member::getId).toList(),
+                    getAllTrainings(trainerEntity),
+                    getAllClasses(trainerEntity)
             );
         }
 
@@ -119,5 +138,24 @@ public class TrainerService {
 
         if (trainer.password().length() > 8)
             throw new IllegalArgumentException("The maximum number of characters in the password is 8");
+    }
+
+    private List<Integer> getAllTrainings(Trainer trainer) {
+        var members = trainer.getMembers();
+        var trainings = new ArrayList<Training>();
+        members.forEach(m -> trainings.addAll(m.getTrainings()));
+        var set = new HashSet<Integer>(trainings
+                .stream()
+                .map(Training::getId)
+                .toList());
+
+        return set.stream().toList();
+    }
+
+    private List<Integer> getAllClasses(Trainer trainer) {
+        return trainerClassRepository.findByTrainer(trainer)
+                .stream()
+                .map(TrainerClass::getId)
+                .toList();
     }
 }

@@ -52,6 +52,17 @@ public class TrainingController {
         }
     }
 
+    @GetMapping("/trainer/{trainerId}")
+    public ResponseEntity<RequestResultDto> getTrainingsByTrainer(@PageableDefault Pageable pageable, @PathVariable Integer trainerId) {
+        try {
+            var result = trainingService.listTrainingsByTrainer(pageable, trainerId);
+            return ResponseEntity.status(HttpStatus.OK).body(new RequestResultDto(result, false, null));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RequestResultDto(null, true, ex.getMessage()));
+        }
+    }
+
     @PostMapping
     public ResponseEntity<RequestResultDto> createTraining(@RequestBody TrainingInputDto training) {
         try {
