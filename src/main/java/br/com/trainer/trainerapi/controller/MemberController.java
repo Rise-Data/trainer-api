@@ -34,6 +34,17 @@ public class MemberController {
         }
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<RequestResultDto> getById(@PathVariable Integer id) {
+        try {
+            var result = memberService.listById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(new RequestResultDto(result, false, null));
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RequestResultDto(null, true, ex.getMessage()));
+        }
+    }
+
     @GetMapping("/trainer/{trainerId}")
     public ResponseEntity<RequestResultDto> getMembersByTrainer(Pageable pageable, @PathVariable Integer trainerId) {
         try {
