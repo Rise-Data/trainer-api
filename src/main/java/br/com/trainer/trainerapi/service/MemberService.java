@@ -66,6 +66,11 @@ public class MemberService {
         return new PageImpl<>(result);
     }
 
+    public MemberResultDto listById(Integer id) throws RowNotFoundException {
+        var member = memberRepository.findById(id).orElseThrow(() -> new RowNotFoundException("Member not found"));
+        return new MemberResultDto(member.getId(), member.getName(), member.getPhone(), member.getActive(), member.getTrainingSequence(), member.getTrainer().getId());
+    }
+
     public void addMember(MemberInputDto memberInput) throws RowNotFoundException {
         if (memberInput == null)
             throw new NullPointerException("Member can't be null");
