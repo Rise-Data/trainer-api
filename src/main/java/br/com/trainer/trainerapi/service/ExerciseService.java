@@ -13,6 +13,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ExerciseService {
     private final ExerciseRepository exerciseRepository;
@@ -32,6 +34,7 @@ public class ExerciseService {
                         m.getId(),
                         m.getName(),
                         m.getRepetitions(),
+                        m.getDuration(),
                         m.getTraining().getId(),
                         m.getExerciseType().getId(),
                         m.getDescription(),
@@ -46,6 +49,7 @@ public class ExerciseService {
                         e.getId(),
                         e.getName(),
                         e.getRepetitions(),
+                        e.getDuration(),
                         e.getTraining().getId(),
                         e.getExerciseType().getId(),
                         e.getDescription(),
@@ -60,10 +64,25 @@ public class ExerciseService {
                         e.getId(),
                         e.getName(),
                         e.getRepetitions(),
+                        e.getDuration(),
                         e.getTraining().getId(),
                         e.getExerciseType().getId(),
                         e.getDescription(),
                         e.getLinkVideo())).toList());
+    }
+
+    public List<ExerciseResultDto> listByIds(List<Integer> ids) {
+        return ids.stream().map(id ->
+                exerciseRepository.findById(id).orElseThrow(() -> new RuntimeException("Exercise not found")))
+                .map(e -> new ExerciseResultDto(
+                        e.getId(),
+                        e.getName(),
+                        e.getRepetitions(),
+                        e.getDuration(),
+                        e.getTraining().getId(),
+                        e.getExerciseType().getId(),
+                        e.getDescription(),
+                        e.getLinkVideo())).toList();
     }
 
     public void addExercise(ExerciseInputDto exerciseInput) throws RowNotFoundException {
