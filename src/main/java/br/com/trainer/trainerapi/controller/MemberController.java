@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/member")
 public class MemberController {
@@ -32,11 +34,33 @@ public class MemberController {
         }
     }
 
-    @GetMapping("{trainerId}")
-    public ResponseEntity<RequestResultDto> getMembersByTrainer(@PageableDefault Pageable pageable, @PathVariable Integer trainerId) {
+    @GetMapping("{id}")
+    public ResponseEntity<RequestResultDto> getById(@PathVariable Integer id) {
+        try {
+            var result = memberService.listById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(new RequestResultDto(result, false, null));
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RequestResultDto(null, true, ex.getMessage()));
+        }
+    }
+
+    @GetMapping("/trainer/{trainerId}")
+    public ResponseEntity<RequestResultDto> getMembersByTrainer(Pageable pageable, @PathVariable Integer trainerId) {
         try {
             Page<MemberResultDto> resultDtos = memberService.listMembersByTrainer(pageable, trainerId);
             return ResponseEntity.status(HttpStatus.OK).body(new RequestResultDto(resultDtos, false, null));
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RequestResultDto(null, true, ex.getMessage()));
+        }
+    }
+
+    @PostMapping("/ids")
+    public ResponseEntity<RequestResultDto> getMembersByIds(@PageableDefault Pageable pageable, @RequestBody List<Integer> ids) {
+        try {
+            Page<MemberResultDto> result = memberService.listMembersByIds(pageable, ids);
+            return ResponseEntity.status(HttpStatus.OK).body(new RequestResultDto(result, false, null));
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RequestResultDto(null, true, ex.getMessage()));

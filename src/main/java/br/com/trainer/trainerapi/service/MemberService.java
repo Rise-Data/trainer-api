@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class MemberService {
@@ -37,7 +39,7 @@ public class MemberService {
 
     public Page<MemberResultDto> listMembersByTrainer(Pageable pageable, Integer trainerId) throws RowNotFoundException {
         var trainer = trainerRepository.findById(trainerId).orElseThrow(() -> new RowNotFoundException("Trainer not found"));
-        return new PageImpl<MemberResultDto>(memberRepository.findByTrainer(trainer, pageable)
+        return new PageImpl<MemberResultDto>(memberRepository.findByTrainer(trainer)
                 .stream()
                 .map(m -> new MemberResultDto(
                         m.getId(),
@@ -47,6 +49,26 @@ public class MemberService {
                         m.getTrainingSequence(),
                         m.getTrainer().getId()))
                 .toList());
+    }
+
+    public Page<MemberResultDto> listMembersByIds(Pageable pageable, List<Integer> ids) {
+        var result = new ArrayList<MemberResultDto>();
+
+        ids.forEach(id -> result.addAll(memberRepository.findById(id)
+                .map(member -> new MemberResultDto(
+                        member.getId(),
+                        member.getName(),
+                        member.getPhone(),
+                        member.getActive(),
+                        member.getTrainingSequence(),
+                        member.getTrainer().getId())).stream().toList()));
+
+        return new PageImpl<>(result);
+    }
+
+    public MemberResultDto listById(Integer id) throws RowNotFoundException {
+        var member = memberRepository.findById(id).orElseThrow(() -> new RowNotFoundException("Member not found"));
+        return new MemberResultDto(member.getId(), member.getName(), member.getPhone(), member.getActive(), member.getTrainingSequence(), member.getTrainer().getId());
     }
 
     public void addMember(MemberInputDto memberInput) throws RowNotFoundException {

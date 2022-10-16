@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController()
 @RequestMapping("/api/exercise")
 public class ExerciseController {
@@ -47,6 +49,17 @@ public class ExerciseController {
         try {
             Page<ExerciseResultDto> resultDto = exerciseService.listByTraining(pageable, trainingId);
             return ResponseEntity.status(HttpStatus.OK).body(new RequestResultDto(resultDto, false, null));
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RequestResultDto(null, true, ex.getMessage()));
+        }
+    }
+
+    @PostMapping("/ids")
+    public ResponseEntity<RequestResultDto> getByIds(@RequestBody List<Integer> ids) {
+        try {
+            var result = exerciseService.listByIds(ids);
+            return ResponseEntity.status(HttpStatus.OK).body(new RequestResultDto(result, false, null));
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RequestResultDto(null, true, ex.getMessage()));
